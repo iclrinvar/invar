@@ -1,265 +1,102 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>INVAR: Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-<style>
-:root{
-  --accent:#4477AA;
-  --accent-soft:#e0eef9;
-  --ink:#1c2733;
-  --muted:#5a6b7b;
-  --bg:#fafbfc;
-  --card:#ffffff;
-  --line:#e3e8ee;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:var(--bg);color:var(--ink);
-  font:400 17px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-.narrow{max-width:840px;margin-left:auto;margin-right:auto}
-
-/* hero */
-header{padding:64px 0 34px;text-align:center;background:linear-gradient(180deg,#eef4fa 0%,var(--bg) 100%);border-bottom:1px solid var(--line)}
-h1{font-size:clamp(26px,4vw,40px);line-height:1.2;margin:0 auto 14px;max-width:960px;letter-spacing:-.015em}
-h1 .name{color:var(--accent)}
-.authors{font-size:1.05rem;margin:0 0 4px;color:var(--ink)}
-.venue{color:var(--muted);margin:0 0 26px}
-.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:999px;font-size:.95rem;font-weight:600;text-decoration:none;border:1.5px solid var(--ink);color:var(--ink);background:transparent;transition:all .15s}
-.btn.primary{background:var(--ink);color:#fff}
-.btn.primary:hover{background:var(--accent);border-color:var(--accent)}
-.btn:hover{border-color:var(--accent);color:var(--accent)}
-.btn.disabled{border-color:var(--line);color:#9aa7b4;pointer-events:none}
-
-/* sections */
-section{padding:44px 0 6px}
-h2{font-size:1.55rem;letter-spacing:-.01em;margin:0 0 18px;text-align:center}
-p{margin:0 0 16px}
-.note{font-size:.92rem;color:var(--muted)}
-
-/* figures */
-figure{margin:26px 0}
-figure img{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--line);background:#fff}
-figcaption{font-size:.9rem;color:var(--muted);margin:12px auto 0;max-width:900px;line-height:1.55}
-figcaption b{color:var(--ink)}
-.two-up{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.two-up img{margin:0}
-@media(max-width:640px){.two-up{grid-template-columns:1fr}}
-
-/* stats */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:30px 0 10px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 18px;text-align:center}
-.stat .big{font-size:2rem;font-weight:700;color:var(--accent);letter-spacing:-.02em}
-.stat .lbl{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
-
-/* abstract */
-.abstract{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:30px 34px}
-.footnote{font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent-soft);padding-left:14px;margin-top:18px}
-
-/* videos */
-.vidgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
-.vid{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.vid video{width:100%;display:block;background:#000}
-.vid .vcap{padding:12px 16px;font-size:.92rem;color:var(--muted)}
-.vid .vcap b{color:var(--ink)}
-.vid.full{grid-column:1/-1}
-@media(max-width:700px){.vidgrid{grid-template-columns:1fr}}
-
-footer{margin-top:56px;padding:28px 0 40px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:.88rem}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="INVAR learns visual invariance once from simulation. A frozen encoder lets policies trained on clean simulation transfer zero-shot to real robots.">
+  <meta name="theme-color" content="#f7f9fc">
+  <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-
-<header>
-  <div class="wrap">
-    <h1><span class="name">INVAR</span>: Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</h1>
-    <p class="authors">Anonymous Authors</p>
-    <p class="venue">Under double-blind review at ICLR 2027</p>
-    <div class="btns">
-      <span class="btn disabled">📄 Paper &mdash; via OpenReview</span>
-      <span class="btn disabled">💻 Code &mdash; coming soon</span>
-      <a class="btn primary" href="#videos">🎥 Real-robot videos</a>
-    </div>
+<a class="skip" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Page sections"><a class="wordmark" href="#top">INVAR<span>↗</span></a><div><a href="#idea">Idea</a><a href="#method">Method</a><a href="#data">Data</a><a href="#results">Results</a><a href="#robustness">Robustness</a><a href="#analysis">Analysis</a><a href="#scaling">Scaling</a></div></nav>
+<header id="top" class="hero wrap">
+  <p class="eyebrow">VISUAL REPRESENTATIONS FOR ROBOT LEARNING</p>
+  <h1>INVAR</h1>
+  <p class="subtitle">Randomization-Invariant Visual Representations<br class="desktop"> for Zero-Shot Sim-to-Real</p>
+  <p class="authors">Anonymous Authors <span>·</span> Under review at ICLR 2027</p>
+  <div class="actions"><a class="button primary" href="#results"><span aria-hidden="true">▷</span> Real-robot results</a><a class="button" href="#method">Explore the method <span aria-hidden="true">↓</span></a></div>
+  <p class="resource-note">Paper available through the review submission. Code coming soon.</p>
+  <div class="tldr"><strong>TL;DR</strong><p>Learn visual invariance <em>once</em>. INVAR turns paired clean and randomized simulation renders into a reusable visual encoder. Freeze it, train a policy on clean simulation, and deploy zero-shot on real robots.</p></div>
+  <div class="hero-films">
+    <figure><video controls muted loop playsinline preload="metadata" poster="assets/story/invar-pour.jpg" src="assets/story/invar-pour.mp4" aria-label="INVAR dexterous hand pouring into a bowl"></video><figcaption><span>Dexterous manipulation</span><strong>Unseen object. Unseen pouring task.</strong></figcaption></figure>
+    <figure><video controls muted loop playsinline preload="metadata" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4" aria-label="INVAR bimanual robot putting bottles into a bin"></video><figcaption><span>Bimanual manipulation</span><strong>New tasks, with the same frozen encoder.</strong></figcaption></figure>
   </div>
+  <div class="facts"><div><strong>≈2×</strong><span>real-world success<br>vs. the strongest suite baseline</span></div><div><strong>6.3M</strong><span>paired simulation renders<br>for representation pretraining</span></div><div><strong>3</strong><span>simulated embodiments<br>in one reusable encoder</span></div><div><strong>0</strong><span>real-world images<br>for INVAR adaptation</span></div></div>
+  <p class="small center">INVAR adapts a pretrained DINOv3 backbone using simulation only. Downstream policies use no real-robot training data.</p>
 </header>
-
-<main class="wrap">
-
-  <figure>
-    <img src="assets/teaser.jpg" alt="INVAR teaser figure">
-    <figcaption>
-      Prior sim-to-real approaches regenerate randomized simulation data and relearn visual
-      invariance for every new task. <b>INVAR instead learns a task-agnostic,
-      randomization-invariant visual representation once, enabling policy training on clean
-      simulation data with a frozen encoder.</b> The resulting policies converge faster and
-      achieve 2&times; higher real-world success across our dexterous-hand and parallel-gripper
-      evaluations, while maintaining task-relevant attention under the sim-to-real appearance shift.
-    </figcaption>
-  </figure>
-
-  <section id="abstract" class="narrow">
-    <h2>Abstract</h2>
-    <div class="abstract">
-      <p>Humans know to act consistently across real and simulated environments because they can
-      abstract away visual appearance to what matters for the task. Can robots achieve similar
-      visual invariance? We present <b>INVAR</b>, a visual representation for <em>zero-shot</em>
-      sim-to-real transfer. While classic sim-to-real methods rely on task-specific domain
-      randomization (DR) to train visual encoders and action policies, INVAR distills diverse
-      simulation randomizations into a unified, <em>invariant</em> visual encoder that is
-      self-supervised and scalable. It leverages self-distillation over an unlabeled corpus of
-      simulated play data and robot rollouts without requiring real-world images during
-      representation learning. A policy trained purely on clean simulation data with a frozen
-      INVAR encoder transfers zero-shot to the real world. INVAR nearly doubles the success rate
-      of identical policies built on state-of-the-art pretrained encoders trained with standard
-      DR, across both dexterous grasping (0.62 vs. 0.35 mean success) and parallel-gripper
-      manipulation (0.65 vs. 0.32). These results demonstrate that decoupling visual invariance
-      into a task-agnostic encoder unlocks scalable, zero-shot sim-to-real transfer, similar to
-      humans.</p>
-      <div class="footnote">Why &ldquo;INVAR&rdquo;? Invar is a nickel&ndash;iron alloy prized for
-      holding its dimensions across a wide temperature range; our encoder holds its representation
-      across a wide range of rendering conditions.</div>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><div class="big">2&times;</div><div class="lbl">real-world success vs. the strongest DR-trained baseline</div></div>
-      <div class="stat"><div class="big">0</div><div class="lbl">real-world images used during representation learning</div></div>
-      <div class="stat"><div class="big">6.3M</div><div class="lbl">state-matched clean&harr;randomized render pairs</div></div>
-      <div class="stat"><div class="big">3</div><div class="lbl">simulated embodiments distilled into one frozen encoder</div></div>
-    </div>
-  </section>
-
-  <section id="method">
-    <h2>Method</h2>
-    <div class="narrow">
-      <p>INVAR formulates domain randomization as a structured objective for representation
-      learning. We construct a pretraining dataset of paired observations, extracting both a
-      canonical <em>clean</em> render and a domain-randomized render from identical underlying
-      simulator states. Through a self-distillation objective, we align these pairs to enforce an
-      encoder representation that is invariant to the visual perturbations parameterized by the DR
-      distribution. The pretraining corpus aggregates these paired observations across three
-      simulated embodiments, and a linear action probe selects checkpoints. For downstream
-      evaluation, the pretrained encoder is frozen, and a behavior-cloning (BC) policy is trained
-      entirely atop the invariant feature space.</p>
-    </div>
-    <figure>
-      <img src="assets/pipeline.jpg" alt="INVAR self-distillation pipeline">
-      <figcaption>
-        <b>INVAR self-distillation.</b> INVAR learns a visual representation from state-matched
-        clean and randomized simulation renders collected across three robot embodiments:
-        dexterous-hand grasping, parallel-gripper manipulation, and humanoid loco-manipulation.
-        The corpus spans diverse camera views and tasks, encouraging transfer across embodiments
-        rather than overfitting to a single robot or task. For each underlying simulator state,
-        the teacher receives a clean render while the student receives visually randomized views;
-        the student is trained to match the EMA teacher through a CLS self-distillation loss, with
-        gradients stopped through the teacher. A linear action probe behind a gradient stop
-        monitors action-relevant information without training the encoder.
-      </figcaption>
-    </figure>
-  </section>
-
-  <section id="results">
-    <h2>Zero-Shot Real-World Results</h2>
-    <div class="narrow">
-      <p>All evaluations measure zero-shot transfer to objects and tasks strictly excluded from
-      pretraining, on two physical platforms. On the dexterous-hand suite, the evaluation
-      introduces a five-object suite of unseen objects and an unseen task and motion
-      (<em>pour wine into bowl</em>). On the bimanual parallel-gripper suite, both the target
-      objects and the task concepts (<em>bottle-in-bin</em>, <em>mug-flipping</em>) are absent
-      from the pretraining corpus.</p>
-    </div>
-
-    <figure class="narrow">
-      <div class="two-up">
-        <img src="assets/setup_dex.jpg" alt="Dexterous-hand platform">
-        <img src="assets/setup_gripper.jpg" alt="Bimanual parallel-gripper platform">
-      </div>
-      <figcaption><b>Real-world setups.</b> Left: dexterous-hand platform. Right: bimanual
-      parallel-gripper platform.</figcaption>
-    </figure>
-
-    <figure>
-      <img src="assets/results_dex.png" alt="Dexterous-hand results">
-      <figcaption>
-        <b>Dexterous hand.</b> Left: object-averaged success rate on the grasping suite; each
-        real-world bar averages 125 rollouts (5 objects &times; 25 rollouts per object per arm).
-        Right: zero-shot generalization to the unseen pouring task (24 real-world rollouts per
-        arm) &mdash; INVAR outperforms the strongest baseline by 2.3&times; on physical hardware,
-        despite that baseline&rsquo;s vision encoder having over 10&times; more parameters.
-      </figcaption>
-    </figure>
-
-    <figure>
-      <img src="assets/results_gripper.png" alt="Bimanual parallel-gripper results">
-      <figcaption>
-        <b>Bimanual parallel gripper.</b> Success rate per task; real-world bars are 24 rollouts
-        per task per arm. INVAR reaches a 0.61 real-world mean success rate, nearly double the
-        0.32 of the strongest baseline &mdash; and while CAIP matches INVAR in simulation, its
-        performance drops drastically on hardware.
-      </figcaption>
-    </figure>
-  </section>
-
-  <section id="videos">
-    <h2>Real-Robot Rollouts</h2>
-    <div class="narrow">
-      <p class="note" style="text-align:center">All policies below are trained purely on clean
-      simulation data atop the frozen INVAR encoder and deployed zero-shot on real hardware.</p>
-    </div>
-    <div class="vidgrid">
-      <div class="vid">
-        <video controls preload="metadata" loop playsinline poster="assets/videos/dex_pour_wine_poster.jpg">
-          <source src="assets/videos/dex_pour_wine.mp4" type="video/mp4">
-        </video>
-        <div class="vcap"><b>Dexterous hand &mdash; unseen task: pour wine into bowl.</b>
-        Both the object instances and the pouring motion are absent from pretraining.</div>
-      </div>
-      <div class="vid">
-        <video controls preload="metadata" loop playsinline poster="assets/videos/gripper_bottles_poster.jpg">
-          <source src="assets/videos/gripper_bottles.mp4" type="video/mp4">
-        </video>
-        <div class="vcap"><b>Bimanual parallel gripper &mdash; bottles into bin.</b>
-        Real-world rollout of an unseen task concept.</div>
-      </div>
-      <div class="vid full">
-        <video controls preload="metadata" loop playsinline poster="assets/videos/dex_hammer_poster.jpg">
-          <source src="assets/videos/dex_hammer.mp4" type="video/mp4">
-        </video>
-        <div class="vcap"><b>Dexterous hand &mdash; hammer on nail.</b> Real-world deployment
-        (2&times; speed).</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="analysis">
-    <h2>What Does INVAR Attend To?</h2>
-    <figure>
-      <img src="assets/attn_panels.jpg" alt="Attention analysis on out-of-distribution inputs">
-      <figcaption>
-        Last-block CLS&rarr;patch attention on out-of-distribution inputs: a human egocentric
-        pouring clip (top) and a real hammer-on-nail deployment rollout (bottom). Columns: input,
-        INVAR, DINOv3, CAIP. INVAR concentrates on the manipulated objects and contact points
-        (cup and bottle; mallet, nail block and fingertips), while DINOv3 spends attention on
-        background texture and CAIP stays diffuse even on egocentric human video &mdash; its own
-        pretraining domain.
-      </figcaption>
-    </figure>
-  </section>
-
-</main>
-
-<footer>
-  <div class="wrap">
-    Anonymous project page for a paper under double-blind review at ICLR 2027.<br>
-    This site intentionally contains no author-identifying information.
+<main id="main">
+<section id="idea" class="section wrap">
+  <div class="section-heading"><span class="index">01 / THE IDEA</span><h2>Learn invariance once.<br>Reuse it for every new policy.</h2><p>Visual domain randomization usually asks each new policy to relearn which appearance changes to ignore. INVAR moves that work into a separate, task-agnostic pretraining stage.</p></div>
+  <div class="switcher" role="group" aria-label="Compare training approaches"><button type="button" data-approach="prior" aria-pressed="false">Prior approach</button><button type="button" data-approach="invar" aria-pressed="true">INVAR</button></div>
+  <div class="approach-stage" id="approach-stage">
+    <div class="approach-input"><span class="overline" id="input-label">Clean simulation</span><img id="approach-image" src="assets/story/clean-bottles.webp" alt="Clean simulation of bimanual bottle manipulation" width="896" height="672"><p id="input-caption">Train each new policy on nominal renders.</p></div>
+    <div class="approach-flow"><span class="arrow" aria-hidden="true">→</span><div class="encoder"><span id="encoder-state">FROZEN</span><strong id="encoder-name">INVAR<br>encoder</strong></div><span class="arrow" aria-hidden="true">→</span><div class="policy"><span>TRAIN</span><strong>Policy π</strong></div></div>
+    <div class="approach-out"><span class="overline">Real-world deployment</span><video id="approach-video" controls muted loop playsinline preload="none" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4" aria-label="INVAR real-world bottle manipulation example"></video><p id="output-caption">Reuse learned invariance for zero-shot transfer.</p></div>
   </div>
-</footer>
-
+  <p id="approach-explanation" class="callout" aria-live="polite"><strong>Randomize during encoder pretraining.</strong> Freeze INVAR, then learn downstream behavior with clean simulation data. The representation is shared across tasks.</p>
+  <p class="small">The videos illustrate the two pipelines; individual rollouts are qualitative examples, not aggregate success-rate comparisons.</p>
+</section>
+<section id="method" class="section tinted">
+ <div class="wrap">
+  <div class="section-heading"><span class="index">02 / SELF-DISTILLATION</span><h2>Same state. Different appearance.<br>A consistent representation.</h2><p>A simulator can render exactly the same underlying state in different ways. INVAR uses that correspondence as supervision: a student sees randomized images and learns to match a teacher that sees clean images.</p></div>
+  <div class="steps" role="group" aria-label="Self-distillation explanation"><button type="button" data-step="0" aria-pressed="true"><span>1</span> Match the state</button><button type="button" data-step="1" aria-pressed="false"><span>2</span> Align the features</button><button type="button" data-step="2" aria-pressed="false"><span>3</span> Freeze and reuse</button></div>
+  <div class="distill-stage">
+    <div class="pair"><figure><img id="student-image" src="assets/story/random-chess.webp" alt="Randomized rendering of a simulated chess manipulation scene" width="1792" height="1344"><figcaption>Student input <b>Randomized</b></figcaption></figure><figure><img src="assets/story/clean-chess.webp" alt="Clean rendering of the same simulator state" width="1792" height="1344"><figcaption>Teacher input <b>Clean</b></figcaption></figure></div>
+    <div class="step-description" aria-live="polite"><span class="overline" id="step-kicker">STATE-MATCHED RENDERING</span><h3 id="step-title">Change appearance, preserve the scene.</h3><p id="step-copy">Lighting, materials, table textures, camera extrinsics, and backgrounds vary. The simulator state stays fixed, so the pair provides a precise signal for which visual changes to ignore.</p><div class="equation" id="step-equation">Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span></div><button type="button" class="text-button" id="variation">Show another randomization ↻</button></div>
+  </div>
+  <details><summary>Full training pipeline and technical details</summary><figure><img src="assets/pipeline.jpg" alt="INVAR pipeline: randomized student and clean EMA teacher with CLS loss and a detached action probe" loading="lazy"><figcaption>The teacher receives clean crops; the student receives randomized crops. A CLS self-distillation loss aligns their output distributions. The teacher follows an exponential moving average of the student, with gradients stopped through the teacher. A detached linear action probe selects checkpoints without updating the encoder.</figcaption></figure><p>We fine-tune a DINOv3 ViT-S+/16 backbone (28.7M parameters), using two teacher crops, eight student crops, and 65,536 prototypes. Teacher centering, sharpening, and EMA updates follow the self-distillation recipe. The objective does not use task labels or rewards; the separate action probe is used for checkpoint selection.</p></details>
+ </div>
+</section>
+<section id="data" class="section wrap">
+ <div class="section-heading"><span class="index">03 / SIMULATION DATA</span><h2>Different robots. Shared visual structure.</h2><p>Approximately 6.3 million clean–randomized pairs span dexterous grasping, bimanual manipulation, and humanoid loco-manipulation. Diverse embodiments, viewpoints, and tasks teach a reusable representation.</p></div>
+ <div class="switcher" role="group" aria-label="Simulation data gallery"><button type="button" data-gallery="embodiments" aria-pressed="true">Across embodiments</button><button type="button" data-gallery="views" aria-pressed="false">Across views</button><button type="button" data-gallery="tasks" aria-pressed="false">Across tasks</button></div>
+ <div id="data-gallery" class="gallery" aria-live="polite">
+ <figure><img src="assets/story/data-dex.webp" alt="Simulated dexterous hand grasping an object" loading="lazy"><figcaption><strong>Dexterous hand</strong><span>22-DoF hand; 20 pretraining objects.</span></figcaption></figure>
+ <figure><img src="assets/story/data-gripper.webp" alt="Simulated bimanual grippers manipulating dishes" loading="lazy"><figcaption><strong>Bimanual parallel gripper</strong><span>Five tabletop tasks; three camera views.</span></figcaption></figure>
+ <figure><img src="assets/story/data-humanoid.webp" alt="Humanoid simulation in a furnished scene" loading="lazy"><figcaption><strong>Humanoid loco-manipulation</strong><span>Object transport in reconstructed scenes.</span></figcaption></figure>
+ </div>
+ <p class="small">Downstream evaluation objects are excluded from encoder pretraining. Pouring and both parallel-gripper evaluation tasks also introduce unseen task concepts. The humanoid contributes pretraining data and is not evaluated downstream.</p>
+</section>
+<section id="results" class="section tinted">
+ <div class="wrap">
+ <div class="section-heading"><span class="index">04 / ZERO-SHOT TRANSFER</span><h2>From clean simulation<br>to real manipulation.</h2><p>All INVAR policies below use the same frozen visual encoder and learn behavior entirely in simulation. They transfer to real robots without real-world policy training or fine-tuning.</p></div>
+ <div class="switcher" role="group" aria-label="Real-world task"><button type="button" data-task="pour" aria-pressed="true">Pour wine</button><button type="button" data-task="bottles" aria-pressed="false">Bottles into bin</button><button type="button" data-task="mug" aria-pressed="false">Flip a mug</button><button type="button" data-task="grasp" aria-pressed="false">Grasp unseen objects</button><button type="button" data-task="hammer" aria-pressed="false">Hammer demo</button></div>
+ <div class="result-layout">
+  <figure class="result-film"><video id="result-video" controls muted loop playsinline preload="none" poster="assets/story/invar-pour.jpg" src="assets/story/invar-pour.mp4" aria-label="INVAR pours wine into a bowl"></video><figcaption id="result-video-caption">Sharpa dexterous hand on a Tianji arm. Example real-world rollout.</figcaption></figure>
+  <div class="result-copy" aria-live="polite"><span class="overline" id="result-tag">UNSEEN OBJECT AND TASK</span><h3 id="result-title">Pour wine into a bowl</h3><p id="result-description">The object instances and the pouring motion are absent from encoder pretraining.</p><div id="result-scores"><span class="chart-label">Real-world success rate</span><div class="score"><div><b>INVAR</b><strong id="ours-score">58%</strong></div><div class="track"><span id="ours-bar" style="width:58%"></span></div></div><div class="score baseline"><div><span id="baseline-name">DINOv3 with DR</span><strong id="baseline-score">25%</strong></div><div class="track"><span id="baseline-bar" style="width:25%"></span></div></div><p class="small" id="sample-note">24 real-world rollouts per method. Strongest evaluated baseline for this task.</p></div></div>
+ </div>
+ <details><summary>All methods, simulation results, and evaluation protocol</summary><figure><img src="assets/story/results.webp" alt="Success rates for all six encoder and policy-training settings across real, nominal simulation, and randomized simulation evaluations" loading="lazy" width="2814" height="714"><figcaption>Paper Fig. 4. INVAR uses a frozen encoder and clean policy-training data. The other settings vary the pretrained encoder, whether it is frozen, and whether policy data uses visual domain randomization.</figcaption></figure><p>Dexterous grasping averages 125 real-world rollouts per method across five objects (25 each). The remaining benchmark tasks use 24 real-world rollouts per method. Simulation uses 50 episodes per evaluated checkpoint. All methods share the downstream behavior-cloning architecture.</p><div class="table-scroll"><table><caption>Real-world suite means reported in the paper</caption><thead><tr><th>Evaluation suite</th><th>INVAR</th><th>Strongest suite baseline</th></tr></thead><tbody><tr><td>Dexterous manipulation (five grasp objects + pouring)</td><td>0.61</td><td>0.30</td></tr><tr><td>Bimanual parallel gripper (bottles + mug)</td><td>0.65</td><td>0.32</td></tr></tbody></table></div><p class="small">Suite means and the strongest baseline per individual task are distinct comparisons. Pouring is evaluated against DINOv3 with DR; not every baseline is evaluated on pouring.</p></details>
+ <details><summary>Downstream policies also converge faster</summary><p>INVAR reaches 90% of its own peak success approximately 1.5× faster than the fastest baseline. Each method is compared to its own peak, averaged across five training runs (paper Table 1).</p><div class="table-scroll"><table><thead><tr><th>Mean epoch to 90% peak ↓</th><th>INVAR</th><th>Fastest baseline</th></tr></thead><tbody><tr><td>Nominal simulation</td><td>29.4</td><td>44.6</td></tr><tr><td>Simulation with visual DR</td><td>27.6</td><td>38.4</td></tr></tbody></table></div></details>
+ </div>
+</section>
+<section id="robustness" class="section wrap">
+ <div class="section-heading"><span class="index">05 / ROBUSTNESS</span><h2>Different lighting. Different surfaces.<br>The task stays the same.</h2><p>Real-world evaluations vary lighting, table appearance, object initialization, and background clutter. These rollout galleries show INVAR operating across the tested conditions.</p></div>
+ <div class="switcher" role="group" aria-label="Robustness task"><button type="button" data-robust="watering" aria-pressed="true">Watering can</button><button type="button" data-robust="spray" aria-pressed="false">Spray bottle</button><button type="button" data-robust="mug" aria-pressed="false">Mug flipping</button><button type="button" data-robust="bottles" aria-pressed="false">Bottles into bin</button></div>
+ <figure class="wide-film"><video id="robust-video" controls muted loop playsinline preload="none" poster="assets/story/robust-watering.jpg" src="assets/story/robust-watering.mp4" aria-label="Watering-can grasping trials under varied visual conditions"></video><figcaption id="robust-caption">Dexterous grasping of a watering can across varied real-world scenes. Each tile shows a separate rollout.</figcaption></figure>
+</section>
+<section id="analysis" class="section tinted">
+ <div class="wrap">
+ <div class="section-heading"><span class="index">06 / INSIDE THE REPRESENTATION</span><h2>What does INVAR keep?<br>The objects and interactions that matter.</h2><p>Attention, patch-feature PCA, and sim-to-real correspondence offer complementary views of the learned representation. These qualitative examples help explain its resilience to appearance changes.</p></div>
+ <div class="switcher" role="group" aria-label="Representation analysis"><button type="button" data-analysis="robot" aria-pressed="true">Robot attention</button><button type="button" data-analysis="human" aria-pressed="false">Human attention</button><button type="button" data-analysis="pca" aria-pressed="false">Feature PCA</button><button type="button" data-analysis="correspondence" aria-pressed="false">Sim-to-real matches</button></div>
+ <div class="analysis-labels" id="analysis-labels"><span>Input</span><span>INVAR</span><span>DINOv3</span><span>CAIP</span></div>
+ <figure class="analysis-film"><video id="analysis-video" controls muted loop playsinline preload="none" poster="assets/story/attention-robot.jpg" src="assets/story/attention-robot.mp4" aria-label="Input and attention maps from INVAR, DINOv3, and CAIP on a real robot video"></video><img id="analysis-image" src="assets/story/correspondence.webp" alt="Four simulation query patches matched to real-world patches: INVAR recovers bowl, bottle, fingertip, and arm correspondences" hidden loading="lazy" width="2892" height="1202"><figcaption id="analysis-caption">Last-block attention on real robot footage. INVAR concentrates on the manipulated object and contact regions; DINOv3 also attends to appearance variation, while CAIP is more diffuse.</figcaption></figure>
+ <p class="small">These are qualitative visualizations, not a quantitative measure of causal importance. Human egocentric videos and real-robot footage are outside INVAR’s simulation adaptation data.</p>
+ </div>
+</section>
+<section id="scaling" class="section wrap">
+ <div class="section-heading"><span class="index">07 / SCALING AND ABLATIONS</span><h2>More varied simulation<br>makes a better visual encoder.</h2><p>At a fixed pretraining budget, adding embodiments improves real-world transfer. Reducing the number of paired renders also reduces performance. Simulation success alone does not reveal these differences.</p></div>
+ <div class="switcher" role="group" aria-label="Scaling ablation"><button type="button" data-scale="diversity" aria-pressed="true">Embodiment diversity</button><button type="button" data-scale="size" aria-pressed="false">Dataset size</button></div>
+ <div class="scaling-charts" id="scaling-charts" aria-live="polite"></div>
+ <p class="small">Paper Table 2. Separate ablation suite: hammer and spray-bottle grasping on the dexterous platform, and bottle-in-bin on the gripper platform. Real-world ablations use 12 rollouts per task; these values are separate from the main benchmark.</p>
+ <details><summary>What matters beyond dataset size?</summary><div class="findings"><div><h3>Cross-embodiment diversity</h3><p>Single-embodiment object diversity improves dexterous success from 0.54 (5 objects) to 0.63 (20 objects). Gripper task diversity improves success from 0.50 (2 tasks) to 0.58 (5 tasks). The gains from including other embodiments are larger.</p></div><div><h3>The asymmetric objective</h3><p>With matched data, architecture, and optimization budget, using randomized images for both teacher and student reduces real-world success from 0.84 to 0.42. Explicitly aligning the randomized student to a clean teacher matters.</p></div></div></details>
+ <div class="closing"><h3>Randomization becomes a reusable pretraining cost.</h3><p>Learn a visual representation that survives appearance changes, then use clean simulation to learn new behavior.</p><p class="small">Scope: INVAR addresses the visual reality gap. It does not resolve differences in geometry, dynamics, or actuation. The downstream evaluations here use behavior cloning.</p></div>
+</section>
+<section id="abstract" class="abstract wrap"><details><summary>Read the abstract</summary><p>Humans know to act consistently across real and simulated environments because they can abstract away visual appearance to what matters for the task. Can robots achieve similar visual invariance? We present INVAR, a visual representation for zero-shot sim-to-real transfer. While classic sim-to-real methods rely on task-specific domain randomization (DR) to train visual encoders and action policies, INVAR distills diverse simulation randomizations into a unified, invariant visual encoder that is self-supervised and scalable. It leverages self-distillation over an unlabeled corpus of simulated play data and robot rollouts without requiring real-world images during representation learning. A policy trained purely on nominal simulation data with a frozen INVAR encoder transfers zero-shot to the real world. INVAR nearly doubles the success rate of identical policies built on state-of-the-art pretrained encoders trained with standard DR, across both dexterous manipulation (0.61 vs. 0.30 mean success) and parallel-gripper manipulation (0.65 vs. 0.32). These results demonstrate that decoupling visual invariance into a task-agnostic encoder unlocks scalable, zero-shot sim-to-real transfer, similar to humans.</p></details></section>
+</main>
+<footer class="wrap"><a class="wordmark" href="#top">INVAR <span>↑</span></a><p>Like the nickel–iron alloy that holds its dimensions as temperature changes,<br>INVAR aims to hold its representation as visual appearance changes.</p><p class="small">Anonymous project page · ICLR 2027 submission</p></footer>
 </body>
 </html>

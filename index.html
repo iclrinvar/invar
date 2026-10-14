@@ -7,14 +7,13 @@
   <meta name="description" content="INVAR learns visual invariance once from simulation. A frozen encoder lets policies trained on clean simulation transfer zero-shot to real robots.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261014-2">
+  <script src="script.js?v=20261014-2" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <nav class="nav" aria-label="Page sections"><a class="wordmark" href="#top">INVAR<span>↗</span></a><div><a href="#idea">Idea</a><a href="#method">Method</a><a href="#results">Results</a><a href="#convergence">Learning</a><a href="#robustness">Robustness</a><a href="#analysis">Analysis</a><a href="#scaling">Scaling</a></div></nav>
 <header id="top" class="hero wrap">
-  <p class="eyebrow">VISUAL REPRESENTATIONS FOR ROBOT LEARNING</p>
   <h1>INVAR</h1>
   <p class="subtitle">Randomization-Invariant Visual Representations<br class="desktop"> for Zero-Shot Sim-to-Real</p>
   <p class="authors">Anonymous Authors <span>·</span> Under review at ICLR 2027</p>
@@ -59,12 +58,13 @@
       <div class="nuisance-tags"><span>Lighting</span><span>Materials</span><span>Table texture</span><span>Camera</span><span>Background</span><button type="button" id="variation">Randomize again ↻</button></div>
     </div>
     <div class="method-scene" data-scene="1" hidden role="group" aria-label="Teacher and student align through a self-distillation loss">
+      <svg class="ema-connector" aria-label="EMA updates teacher weights from the student"><defs><marker id="ema-arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="#d4bd7a"/></marker></defs><line id="ema-line" marker-end="url(#ema-arrowhead)"/><text id="ema-label" text-anchor="end"><tspan>EMA weight</tspan><tspan dy="16">update</tspan></text></svg>
       <div class="network-row student-row"><figure><img src="assets/story/random-chess.webp" alt="Randomized student view"><figcaption>Randomized</figcaption></figure><div class="flow-edge"><i></i></div><div class="network-block student"><small>TRAINABLE</small><strong>Student</strong><span>f<sub>θ</sub></span></div><div class="flow-edge"><i></i></div><div class="projection"><span>Projection</span><div class="feature-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div><small>Softmax</small></div></div>
-      <div class="alignment-row"><div class="ema-loop"><span>↶</span> EMA weight update</div><div class="loss-node"><span class="pulse-dot"></span><strong>CLS loss</strong><small>Match the output distributions</small></div></div>
+      <div class="alignment-row"><div class="loss-node"><span class="pulse-dot"></span><strong>CLS loss</strong><small>Match the output distributions</small></div></div>
       <div class="network-row teacher-row"><figure><img src="assets/story/clean-chess.webp" alt="Clean teacher view"><figcaption>Clean</figcaption></figure><div class="flow-edge"><i></i></div><div class="network-block teacher"><small>STOP GRADIENT</small><strong>Teacher</strong><span>f<sub>θ̄</sub></span></div><div class="flow-edge"><i></i></div><div class="projection"><span>Projection</span><div class="feature-bars steady"><i></i><i></i><i></i><i></i><i></i><i></i></div><small>Centering + softmax</small></div></div>
     </div>
     <div class="method-scene" data-scene="2" hidden role="group" aria-label="A frozen encoder connects clean simulation training to real-world deployment">
-      <div class="reuse-training"><figure><span class="node-label">CLEAN SIMULATION</span><img src="assets/story/clean-bottles.webp" alt="Clean simulation policy-training input"><figcaption>New downstream task</figcaption></figure><div class="flow-edge"><i></i></div><div class="network-block frozen"><span class="snowflake">❄</span><strong>INVAR</strong><small>FROZEN ENCODER</small></div><div class="flow-edge"><i></i></div><div class="network-block train-policy"><span>π</span><strong>BC policy</strong><small>TRAIN IN SIMULATION</small></div></div>
+      <div class="reuse-training"><figure><span class="node-label">CLEAN SIMULATION</span><img src="assets/story/clean-bottles.webp" alt="Clean simulation policy-training input"><figcaption>New downstream task</figcaption></figure><div class="flow-edge"><i></i></div><div class="network-block frozen"><span class="snowflake">❄</span><strong>INVAR</strong><small>FROZEN ENCODER</small></div><div class="flow-edge"><i></i></div><div class="network-block train-policy"><span>π</span><strong>Policy</strong><small>TRAIN IN SIMULATION</small></div></div>
       <div class="deployment-arrow"><span>Same frozen representation</span><i>↓</i></div>
       <div class="reuse-deploy"><span class="node-label">ZERO-SHOT REAL-WORLD DEPLOYMENT</span><div><video controls muted loop playsinline preload="none" poster="assets/story/invar-pour.jpg" src="assets/story/invar-pour.mp4" aria-label="Dexterous pouring deployment with the frozen encoder"></video><video controls muted loop playsinline preload="none" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4" aria-label="Bimanual deployment with the frozen encoder"></video></div></div>
     </div>

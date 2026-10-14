@@ -44,9 +44,19 @@ function showStep(value) {
   const [kicker,title,copy] = steps[methodStep];
   text('step-kicker',kicker); text('step-title',title); text('step-copy',copy);
   $('distill-stage').dataset.step = methodStep;
+  requestAnimationFrame(positionEmaConnector);
   document.querySelectorAll('[data-step]').forEach(button => {if(button.tagName === 'BUTTON')button.setAttribute('aria-pressed',String(Number(button.dataset.step)===methodStep));});
   document.querySelectorAll('[data-scene]').forEach(scene => {scene.hidden=Number(scene.dataset.scene)!==methodStep;if(scene.hidden)scene.querySelectorAll('video').forEach(v=>v.pause());});
 }
+function positionEmaConnector(){
+ const scene=document.querySelector('[data-scene="1"]');
+ if(scene.hidden)return;
+ const parent=scene.getBoundingClientRect(),student=scene.querySelector('.student').getBoundingClientRect(),teacher=scene.querySelector('.teacher').getBoundingClientRect();
+ const x=student.left+student.width/2-parent.left,y1=student.bottom-parent.top,y2=teacher.top-parent.top;
+ const line=$('ema-line');Object.entries({x1:x,x2:x,y1:y1+1,y2:y2-4}).forEach(([key,value])=>line.setAttribute(key,value));
+ const label=$('ema-label');label.setAttribute('x',x-12);label.setAttribute('y',(y1+y2)/2-5);label.querySelectorAll('tspan').forEach(span=>span.setAttribute('x',x-12));
+}
+new ResizeObserver(positionEmaConnector).observe(document.querySelector('[data-scene="1"]'));
 function updateTour(){text('method-tour', touring ? 'Ⅱ Pause tour' : '▷ Play tour');$('method-tour').setAttribute('aria-pressed',String(touring));}
 bindGroup('data-step', value => {touring=false;updateTour();showStep(value);});
 $('method-tour').addEventListener('click',()=>{touring=!touring;updateTour();if(touring)showStep((methodStep+1)%3);});

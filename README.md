@@ -33,3 +33,5 @@ Additional attention and patch-PCA sequences come from the supplied September me
 The visual design takes inspiration from EigenDEXplore's light opening, dark studio sections, media stages, and translucent segmented controls.
 
 The title uses a 22-second, muted H.264 montage assembled from the existing task rollouts. Pouring opens full-frame, then a smooth zoom reveals five grasping objects, mug flipping, and bimanual bottle manipulation in two scenes. The montage loops back to the pouring view; replay and pause controls are provided, and reduced-motion preferences disable autoplay.
+
+All website videos default to 2× playback speed, including newly selected task and representation examples. The title montage therefore plays in 11 seconds at the default speed.

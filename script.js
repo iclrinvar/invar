@@ -1,5 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
+// Apply double-speed playback to initial videos and every replacement source.
+document.querySelectorAll('video').forEach(video=>{video.defaultPlaybackRate=2;video.playbackRate=2;video.addEventListener('loadedmetadata',()=>{video.playbackRate=2;});});
 const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}`;
 function text(id, value) { $(id).textContent = value; }
 function setVideo(id, name, label, legacy = false) {
@@ -24,8 +26,10 @@ bindGroup('data-approach', value => {
   $('approach-stage').dataset.mode = value;
   document.querySelectorAll('.random-source,.random-edge').forEach(el => el.hidden = ours);
   text('input-caption', ours ? 'Nominal renders for each new policy' : 'Start from the nominal scene');
-  text('encoder-state', ours ? '❄ FROZEN' : 'FROZEN / FINETUNED');
-  text('encoder-name', ours ? 'INVAR encoder' : 'Vision encoder');
+  text('encoder-state', ours ? 'FROZEN ENCODER' : 'FROZEN / FINETUNED');
+  $('idea-snowflake').hidden=!ours;
+  document.querySelector('.encoder').classList.toggle('frozen',ours);
+  text('encoder-name', ours ? 'INVAR' : 'Vision encoder');
   text('output-caption', ours ? 'Zero-shot transfer' : 'Appearance changes can disrupt execution');
   setVideo('approach-video', ours ? 'invar-bottles' : 'baseline-bottles', ours ? 'INVAR real-world bottle manipulation example' : 'Prior approach bottle manipulation failure example');
   $('approach-explanation').innerHTML = ours ? '<strong>Randomize once, during encoder pretraining.</strong> Freeze INVAR, then learn downstream behavior with clean simulation data. The representation is shared across tasks.' : '<strong>Clean simulation → randomized simulation → policy learning.</strong> Each new task needs its own randomized data. The policy must learn control and visual invariance together.';
@@ -161,6 +165,7 @@ bindGroup('data-analysis',showAnalysis);showAnalysis('attention');
 const analysisVideo=$('analysis-video');
 function updateAnalysisPlayback(){text('analysis-play',analysisVideo.paused?'▷ Play':'Ⅱ Pause');$('analysis-play').setAttribute('aria-label',analysisVideo.paused?'Play visualization':'Pause visualization');}
 $('analysis-play').addEventListener('click',()=>{if(analysisVideo.paused)analysisVideo.play().catch(()=>text('analysis-caption','The video could not play. Please reload the page and try again.'));else analysisVideo.pause();});
+analysisVideo.addEventListener('ratechange',()=>text('analysis-speed',`${analysisVideo.playbackRate}×`));
 analysisVideo.addEventListener('play',updateAnalysisPlayback);analysisVideo.addEventListener('pause',updateAnalysisPlayback);
 analysisVideo.addEventListener('timeupdate',()=>{const t=analysisVideo.currentTime;text('analysis-clock',`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`);if(Number.isFinite(analysisVideo.duration))$('analysis-time').value=100*t/analysisVideo.duration;});
 analysisVideo.addEventListener('emptied',()=>{text('analysis-clock','0:00');$('analysis-time').value=0;updateAnalysisPlayback();});

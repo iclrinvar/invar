@@ -7,8 +7,8 @@
   <meta name="description" content="INVAR learns visual invariance once from simulation. A frozen encoder lets policies trained on clean simulation transfer zero-shot to real robots.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261015-1">
-  <script src="script.js?v=20261015-1" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261015-2">
+  <script src="script.js?v=20261015-2" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -24,15 +24,19 @@
     <div class="title-controls"><button type="button" id="title-replay">Replay intro ↻</button><button type="button" id="title-motion" aria-pressed="true">Pause video Ⅱ</button></div>
   </div>
   <div class="hero-body">
-  <h2 class="attention-headline">One frozen representation across<br class="desktop"> embodiments, tasks and scenes.</h2>
   <div class="hero-attention">
+    <h2 class="attention-headline">One frozen representation across embodiments, tasks and scenes.</h2>
     <div class="hero-stage-head"><span class="live-dot"></span> Encoder attention map for real world rollouts <button type="button" id="hero-motion" aria-pressed="true">Pause videos <span aria-hidden="true">Ⅱ</span></button></div>
     <div class="hero-column-labels"><span>RGB observation</span><span class="ours-label">INVAR</span><span>DINOv3</span></div>
     <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/hero-pour.jpg" src="assets/story/hero-pour.mp4" aria-label="Pouring: original observation, INVAR attention, and DINOv3 attention"></video><figcaption><span>01</span> Dexterous pouring <small>Attention follows the bottle, bowl, and interaction.</small></figcaption></figure>
     <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/hero-bottles.jpg" src="assets/story/hero-bottles.mp4" aria-label="Bottles into a bin: original observation, INVAR attention, and DINOv3 attention"></video><figcaption><span>02</span> Bimanual manipulation</figcaption></figure>
+    <div class="hero-highlights">
+      <div><strong><em>2×</em> real-world success rate</strong><small>vs. strongest suite baseline</small></div>
+      <div><strong><em>1.5×</em> faster convergence</strong><small>for policy training</small></div>
+      <div><strong><em>0</em> real-world images</strong><small>needed for INVAR pretraining and policy training</small></div>
+    </div>
   </div>
   <div class="tldr"><strong>TL;DR</strong><p>Learn visual invariance <em>once</em>. INVAR turns paired clean and randomized simulation renders into a reusable visual encoder. Freeze it, train a policy on clean simulation, and deploy zero-shot on real robots.</p></div>
-  <div class="facts"><div><strong>≈2×</strong><span>real-world success<br>vs. the strongest suite baseline</span></div><div><strong>6.3M</strong><span>paired simulation renders<br>for representation pretraining</span></div><div><strong>3</strong><span>simulated embodiments<br>in one reusable encoder</span></div><div><strong>0</strong><span>real-world images<br>for INVAR adaptation</span></div></div>
   <p class="small center">INVAR adapts a pretrained DINOv3 backbone using simulation only. Downstream policies use no real-robot training data.</p>
   </div>
 </header>
@@ -43,15 +47,14 @@
   <div class="approach-stage" id="approach-stage" data-mode="invar">
     <figure class="pipeline-image clean-source"><span class="overline">Clean simulation</span><img src="assets/story/clean-bottles.webp" alt="Clean simulation of bimanual bottle manipulation" width="896" height="672"><figcaption id="input-caption">Nominal renders for each new policy</figcaption></figure>
     <div class="flow-edge random-edge" hidden><span>Randomize</span><i></i></div>
-    <figure class="pipeline-image random-source" hidden><span class="overline">Randomized simulation</span><img src="assets/story/random-bottles.webp" alt="The same task with randomized materials, lighting, and background" width="896" height="672"><figcaption>Repeat for every new task</figcaption></figure>
+    <figure class="pipeline-image random-source" hidden><span class="overline">Re-render randomized simulation</span><img src="assets/story/random-bottles.webp" alt="The same task with randomized materials, lighting, and background" width="896" height="672"><figcaption>Repeat for every new task</figcaption></figure>
     <div class="flow-edge"><i></i></div>
-    <div class="encoder"><span id="encoder-state">❄ FROZEN</span><strong id="encoder-name">INVAR<br>encoder</strong></div>
+    <div class="encoder network-block frozen"><span class="snowflake" id="idea-snowflake" aria-hidden="true">❄</span><strong id="encoder-name">INVAR</strong><small id="encoder-state">FROZEN ENCODER</small></div>
     <div class="flow-edge"><i></i></div><div class="policy"><span>TRAIN</span><strong>Policy π</strong></div>
     <div class="flow-edge"><i></i></div>
     <figure class="approach-out"><span class="overline">Real-world deployment</span><video id="approach-video" controls muted loop playsinline preload="none" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4" aria-label="INVAR real-world bottle manipulation example"></video><figcaption id="output-caption">Zero-shot transfer</figcaption></figure>
   </div>
   <p id="approach-explanation" class="callout" aria-live="polite"><strong>Randomize during encoder pretraining.</strong> Freeze INVAR, then learn downstream behavior with clean simulation data. The representation is shared across tasks.</p>
-  <p class="small">The videos illustrate the two pipelines; individual rollouts are qualitative examples, not aggregate success-rate comparisons.</p>
 </section>
 <section id="method" class="section tinted">
  <div class="wrap">
@@ -120,7 +123,7 @@
  <div class="switcher" role="group" aria-label="Representation analysis"><button type="button" data-analysis="attention" aria-pressed="true">Attention</button><button type="button" data-analysis="pca" aria-pressed="false">Feature PCA</button><button type="button" data-analysis="correspondence" aria-pressed="false">Sim-to-real matches</button></div>
  <div class="example-selector" id="analysis-examples" role="group" aria-label="Attention example"></div>
  <div class="analysis-stage"><div class="analysis-labels" id="analysis-labels"><span>RGB input</span><span>INVAR</span><span>DINOv3</span><span>CAIP</span></div>
- <figure class="analysis-film"><video id="analysis-video" muted loop playsinline preload="none" poster="assets/story/attention-robot.jpg" src="assets/story/attention-robot.mp4" aria-label="Input, INVAR, DINOv3, and CAIP attention on spray-bottle grasping"></video><img id="analysis-image" src="assets/story/correspondence.webp" alt="Simulation query patches matched to real-world patches using INVAR, DINOv3, and CAIP" hidden loading="lazy" width="2892" height="1202"><div class="film-transport" id="analysis-transport"><button type="button" id="analysis-play" aria-label="Play visualization">▷ Play</button><input type="range" id="analysis-time" min="0" max="100" step="0.1" value="0" aria-label="Visualization playback position"><span id="analysis-clock">0:00</span><button type="button" id="analysis-speed" aria-label="Change visualization playback speed">1×</button><button type="button" id="analysis-expand" aria-label="Expand visualization to fullscreen">⤢</button></div><figcaption id="analysis-caption">Last-block attention on real robot footage.</figcaption></figure></div>
+ <figure class="analysis-film"><video id="analysis-video" muted loop playsinline preload="none" poster="assets/story/attention-robot.jpg" src="assets/story/attention-robot.mp4" aria-label="Input, INVAR, DINOv3, and CAIP attention on spray-bottle grasping"></video><img id="analysis-image" src="assets/story/correspondence.webp" alt="Simulation query patches matched to real-world patches using INVAR, DINOv3, and CAIP" hidden loading="lazy" width="2892" height="1202"><div class="film-transport" id="analysis-transport"><button type="button" id="analysis-play" aria-label="Play visualization">▷ Play</button><input type="range" id="analysis-time" min="0" max="100" step="0.1" value="0" aria-label="Visualization playback position"><span id="analysis-clock">0:00</span><button type="button" id="analysis-speed" aria-label="Change visualization playback speed">2×</button><button type="button" id="analysis-expand" aria-label="Expand visualization to fullscreen">⤢</button></div><figcaption id="analysis-caption">Last-block attention on real robot footage.</figcaption></figure></div>
  <p class="small">These are qualitative visualizations, not a quantitative measure of causal importance. Human egocentric videos and real-robot footage are outside INVAR’s simulation adaptation data.</p>
  </div>
 </section>

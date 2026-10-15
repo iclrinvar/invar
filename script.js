@@ -1,7 +1,8 @@
 'use strict';
 const $ = id => document.getElementById(id);
 // Apply double-speed playback to initial videos and every replacement source.
-document.querySelectorAll('video').forEach(video=>{video.defaultPlaybackRate=2;video.playbackRate=2;video.addEventListener('loadedmetadata',()=>{video.playbackRate=2;});});
+function configureVideo(video){video.defaultPlaybackRate=2;video.playbackRate=2;video.addEventListener('loadedmetadata',()=>{video.playbackRate=2;});}
+document.querySelectorAll('video').forEach(configureVideo);
 const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}`;
 function text(id, value) { $(id).textContent = value; }
 function setVideo(id, name, label, legacy = false) {
@@ -35,7 +36,7 @@ bindGroup('data-approach', value => {
   $('approach-explanation').innerHTML = ours ? '<strong>Randomize once, during encoder pretraining.</strong> Freeze INVAR, then learn downstream behavior with clean simulation data. The representation is shared across tasks.' : '<strong>Clean simulation → randomized simulation → policy learning.</strong> Each new task needs its own randomized data. The policy must learn control and visual invariance together.';
 });
 const steps = [
-  ['STATE-MATCHED RENDERING', 'Change appearance, preserve the scene.', 'Lighting, materials, table textures, camera extrinsics, and backgrounds vary. The simulator state stays fixed, so the pair provides a precise signal for which visual changes to ignore.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
+  ['STATE-MATCHED RENDERING', 'Change appearance, preserve the scene.', 'Clean and randomized images show the same robot and object state from the head and both wrist cameras. INVAR learns to retain manipulation-relevant information while ignoring changes in lighting, materials, table appearance, and background.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
   ['ASYMMETRIC SELF-DISTILLATION', 'Align a randomized student to a clean teacher.', 'The student matches the teacher’s output distribution with a CLS self-distillation loss. Gradients update the student; an exponential moving average updates the teacher. The teacher always receives clean views.', 'Student(randomized) ≈ Teacher(clean)<br><span>CLS loss · stop-gradient teacher · EMA update</span>'],
   ['DOWNSTREAM POLICY LEARNING', 'Freeze the encoder. Learn new behavior.', 'After pretraining, the encoder stays fixed. A behavior-cloning policy learns on clean simulation images, then uses the same visual representation on the real robot. New policies reuse the learned visual invariance.', 'Clean image → frozen INVAR → policy<br><span>Simulation training → zero-shot deployment</span>']
 ];
@@ -55,32 +56,39 @@ function showStep(value) {
 function positionEmaConnector(){
  const scene=document.querySelector('[data-scene="1"]');
  if(scene.hidden)return;
- const parent=scene.getBoundingClientRect(),student=scene.querySelector('.student').getBoundingClientRect(),teacher=scene.querySelector('.teacher').getBoundingClientRect();
+ const parent=scene.querySelector('.alignment-canvas').getBoundingClientRect(),student=scene.querySelector('.student').getBoundingClientRect(),teacher=scene.querySelector('.teacher').getBoundingClientRect();
  const x=student.left+student.width/2-parent.left,y1=student.bottom-parent.top,y2=teacher.top-parent.top;
  const line=$('ema-line');Object.entries({x1:x,x2:x,y1:y1+1,y2:y2-4}).forEach(([key,value])=>line.setAttribute(key,value));
  const label=$('ema-label');label.setAttribute('x',x-12);label.setAttribute('y',(y1+y2)/2-5);label.querySelectorAll('tspan').forEach(span=>span.setAttribute('x',x-12));
+ const target=$('probe-target').getBoundingClientRect(),probeY=target.top+target.height/2-parent.top;
+ $('probe-path').setAttribute('d',`M ${x} ${student.top-parent.top-2} V ${probeY} H ${target.left-parent.left-7}`);
 }
-new ResizeObserver(positionEmaConnector).observe(document.querySelector('[data-scene="1"]'));
+new ResizeObserver(positionEmaConnector).observe(document.querySelector('.alignment-canvas'));
 function updateTour(){text('method-tour', touring ? 'Ⅱ Pause tour' : '▷ Play tour');$('method-tour').setAttribute('aria-pressed',String(touring));}
 bindGroup('data-step', value => {touring=false;updateTour();showStep(value);});
 $('method-tour').addEventListener('click',()=>{touring=!touring;updateTour();if(touring)showStep((methodStep+1)%3);});
 new IntersectionObserver(entries=>{methodVisible=entries[0].isIntersecting;},{threshold:.15}).observe($('distill-stage'));
 setInterval(()=>{if(touring&&methodVisible&&!document.hidden)showStep((methodStep+1)%3);},6500);
-let variation = 0;
-$('variation').addEventListener('click', () => {
-  variation = 1 - variation;
-  $('student-image').src = asset(variation ? 'random-chess-2' : 'random-chess');
-  $('student-image').alt = `Randomized rendering ${variation + 1} of the same simulated chess manipulation scene`;
-});
+let variation = 1;
+function selectVariation(value){
+ variation=Number(value);
+ for(const [cam,id] of [['top','student-image'],['left','student-left'],['right','student-right']]){
+  $(id).src=asset(`chess-v${variation}-${cam}`);$(id).alt=`Appearance variant ${variation}, ${cam} camera, same simulated chess state`;
+ }
+ $('alignment-student-image').src=asset(`chess-v${variation}-top`);
+ document.querySelectorAll('[data-variant]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.variant)===variation)));
+}
+bindGroup('data-variant',selectVariation);
+$('variation').addEventListener('click',()=>selectVariation(variation%8+1));
 const galleries = {
   embodiments: [
-    ['data-dex','Dexterous hand','22-DoF hand; 20 pretraining objects.','Simulated dexterous hand grasping an object'],
-    ['data-gripper','Bimanual parallel gripper','Five tabletop tasks; three camera views.','Simulated bimanual grippers manipulating dishes'],
-    ['data-humanoid','Humanoid loco-manipulation','Object transport in reconstructed scenes.','Humanoid simulation in a furnished scene']
+    ['data-dex','Dexterous hand','','Simulated dexterous hand grasping an object'],
+    ['data-gripper','Bimanual parallel gripper','','Simulated bimanual grippers manipulating dishes'],
+    ['data-humanoid','Humanoid loco-manipulation','','Humanoid simulation in a furnished scene']
   ],
   views: [
-    ['data-wrist','Wrist camera','A close view of the interaction.','Simulated wrist-camera view of a cup'],
-    ['data-head','Head camera','The same scene from a wider viewpoint.','Simulated head-camera view of a cup and workspace']
+    ['data-wrist','Wrist camera','','Simulated wrist-camera view of a cup'],
+    ['data-head','Head camera','','Simulated head-camera view of a cup and workspace']
   ],
   tasks: [
     ['data-sweep','Sweep','Bimanual pretraining task.','Bimanual robots sweeping in simulation'],
@@ -92,14 +100,20 @@ const galleries = {
   ]
 };
 bindGroup('data-gallery', key => {
+  $('data-gallery').querySelectorAll('video').forEach(video=>{video.pause();mediaObserver.unobserve(video);});
   $('data-gallery').className = `gallery ${key}`;
+  if(key==='tasks'){
+   $('data-gallery').replaceChildren($('pretraining-tasks-template').content.cloneNode(true));
+   $('data-gallery').querySelectorAll('video').forEach(video=>{configureVideo(video);if(reducedMotion.matches){video.autoplay=false;video.pause();}mediaObserver.observe(video);});
+   return;
+  }
   $('data-gallery').replaceChildren(...galleries[key].map(([src,title,copy,alt]) => {
     const figure = document.createElement('figure');
     const img = document.createElement('img'); img.src = asset(src); img.alt = alt; img.loading = 'lazy';
     const caption = document.createElement('figcaption');
     const strong = document.createElement('strong'); strong.textContent = title;
     const span = document.createElement('span'); span.textContent = copy;
-    caption.append(strong,span); figure.append(img,caption); return figure;
+    caption.append(strong);if(copy)caption.append(span); figure.append(img,caption); return figure;
   }));
 });
 const tasks = {
@@ -117,13 +131,29 @@ function showGraspObject(key){
  document.querySelectorAll('[data-object]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.object===key)));
 }
 bindGroup('data-object',showGraspObject);
-bindGroup('data-task', key => {
+function showTask(key){
   const task = tasks[key];
   $('grasp-selector').hidden=key!=='grasp';
   if(key==='grasp')showGraspObject(activeObject);else {setVideo('result-video',task.video,`INVAR: ${task.title}`);text('result-video-caption',task.caption);}
   text('result-tag',task.tag);text('result-title',task.title);text('result-description',task.description);
   text('ours-score',`${task.ours}%`);text('baseline-score',`${task.baseline}%`);text('baseline-name',task.name);text('sample-note',task.note);$('ours-bar').style.width = `${task.ours}%`;$('baseline-bar').style.width = `${task.baseline}%`;
-});
+  selectedTask[activePlatform]=key;
+  document.querySelectorAll('#result-tasks [data-task]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.task===key)));
+}
+const platformTasks={dex:[['grasp','Grasp unseen objects','grasp-spray'],['pour','Pour wine','invar-pour']],bimanual:[['bottles','Bottles into bin','invar-bottles'],['mug','Flip a mug','invar-mug']]};
+const selectedTask={dex:'grasp',bimanual:'bottles'};
+let activePlatform='dex';
+function showPlatform(key){
+ activePlatform=key;
+ $('result-tasks').setAttribute('aria-label',key==='dex'?'Dexterous-hand tasks':'Bimanual-gripper tasks');
+ $('result-tasks').replaceChildren(...platformTasks[key].map(([task,label,poster])=>{
+  const button=document.createElement('button');button.type='button';button.dataset.task=task;
+  const img=document.createElement('img');img.src=asset(poster,'jpg');img.alt='';
+  const span=document.createElement('span');span.textContent=label;button.append(img,span);button.addEventListener('click',()=>showTask(task));return button;
+ }));
+ showTask(selectedTask[key]);
+}
+bindGroup('data-platform',showPlatform);showPlatform('dex');
 const robustness = {
   watering:['Watering-can grasping trials under varied visual conditions','Dexterous grasping of a watering can across varied real-world scenes. Each tile shows a separate rollout.'],
   spray:['Spray-bottle grasping trials under varied visual conditions','Dexterous grasping of a spray bottle under varied lighting, surfaces, and backgrounds. Each tile shows a separate rollout.'],
@@ -192,6 +222,8 @@ function updateTitleButton(){text('title-motion',titlePlaying?'Pause video Ⅱ':
 $('title-motion').addEventListener('click',()=>{titlePlaying=!titlePlaying;updateTitleButton();if(titlePlaying)titleVideo.play().catch(()=>{});else titleVideo.pause();});
 $('title-replay').addEventListener('click',()=>{titleVideo.currentTime=0;titlePlaying=true;updateTitleButton();titleVideo.play().catch(()=>{});});
 updateTitleButton();
-const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||(v.hasAttribute('data-title-autoplay')&&titlePlaying))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
+const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||(v.hasAttribute('data-title-autoplay')&&titlePlaying)||(v.hasAttribute('data-gallery-autoplay')&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
 document.querySelectorAll('video').forEach(v=>{if(reducedMotion.matches&&(v.hasAttribute('data-autoplay')||v.hasAttribute('data-title-autoplay'))){v.autoplay=false;v.pause();}mediaObserver.observe(v);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());});
+
+showStep(0);

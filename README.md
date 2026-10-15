@@ -35,3 +35,7 @@ The visual design takes inspiration from EigenDEXplore's light opening, dark stu
 The title uses a 22-second, muted H.264 montage assembled from the existing task rollouts. Pouring opens full-frame, then a smooth zoom reveals five grasping objects, mug flipping, and bimanual bottle manipulation in two scenes. The montage loops back to the pouring view; replay and pause controls are provided, and reduced-motion preferences disable autoplay.
 
 All website videos default to 2× playback speed, including newly selected task and representation examples. The title montage therefore plays in 11 seconds at the default speed.
+
+The method pairs eight synchronized randomized head/left-wrist/right-wrist renders with the same clean simulator state. The feature-alignment diagram separates projection, teacher centering, softmax, and the detached action probe. Across-task pretraining data is grouped into bimanual tasks and dexterous object grasping. The Sharpa motion illustration is a cropped excerpt (84–96 seconds) of [EigenDEXplore’s published overview video](https://eigendexplore.github.io/videos/overview.mp4), credited beside the player.
+
+Results are organized by embodiment and task, followed by convergence and robustness within the same Results section.

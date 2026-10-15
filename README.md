@@ -31,3 +31,5 @@ The five grasping examples match the five-object rollout set from slide 105 of t
 Additional attention and patch-PCA sequences come from the supplied September meeting deck. Embedded diagnostic headers were removed and source columns reordered consistently to RGB, INVAR, DINOv3, CAIP. The opening comparisons contain RGB, INVAR, and DINOv3. PCA colors are visualized principal components, not class labels. Playback controls are below the analysis footage, with speed, seek, and fullscreen controls.
 
 The visual design takes inspiration from EigenDEXplore's light opening, dark studio sections, media stages, and translucent segmented controls.
+
+The title uses a 22-second, muted H.264 montage assembled from the existing task rollouts. Pouring opens full-frame, then a smooth zoom reveals five grasping objects, mug flipping, and bimanual bottle manipulation in two scenes. The montage loops back to the pouring view; replay and pause controls are provided, and reduced-motion preferences disable autoplay.

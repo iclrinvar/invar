@@ -36,3 +36,31 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 .ema-connector line{stroke:#d4bd7a;stroke-width:1.5}
 .ema-connector text{fill:#b9b9c6;font:12px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 @media(max-width:700px){.ema-connector text{font-size:11px}}
+
+/* Video-led title and attention introduction. */
+.hero{padding:0 0 105px}
+.title-film{position:relative;isolation:isolate;width:100%;aspect-ratio:16/9;min-height:600px;max-height:900px;background:#121214;overflow:hidden;color:white}
+.title-film>video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.title-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.62),rgba(0,0,0,.34) 48%,rgba(0,0,0,.08) 75%,rgba(0,0,0,.35))}
+.title-copy{position:relative;padding:55px 28px 0;max-width:1120px;margin:auto;text-shadow:0 2px 25px #0005}
+.title-copy h1{font-size:clamp(92px,12vw,160px);line-height:1.05;letter-spacing:-.055em;color:#fff;background:none;margin:0 0 23px;font-weight:750}
+.title-copy .subtitle{color:#fff;font-size:clamp(25px,3.4vw,46px);max-width:1080px;line-height:1.23;font-weight:450;letter-spacing:-.025em;margin:0 auto 25px}
+.title-copy .authors{color:#eee;font-size:15px}.title-copy .authors span{color:#ccc}
+.title-controls{position:absolute;bottom:23px;right:28px;display:flex;gap:9px}
+.title-controls button{color:#fff;background:#1115;border:1px solid #ffffff65;border-radius:30px;padding:8px 15px;font-size:13px;backdrop-filter:blur(12px)}
+.title-controls button:hover{background:#ffffff26}
+.hero-body{width:min(1180px,calc(100% - 64px));margin:0 auto;padding-top:65px}
+.attention-headline{font-size:clamp(28px,3.6vw,45px);line-height:1.2;font-weight:600;max-width:1000px;margin:0 auto 32px;letter-spacing:-.035em;color:#29292e}
+.hero-stage-head{font-size:15px}.hero-stage-head button{flex-shrink:0}
+.hero-column-labels{font-size:17px;margin-bottom:15px}
+@media(max-width:700px){
+ .hero{padding:0 0 75px}.hero-body{width:calc(100% - 34px);padding-top:40px}
+ .title-film{min-height:0;height:calc(330px + 56.25vw);max-height:none;aspect-ratio:auto}
+ .title-film>video{height:auto;aspect-ratio:16/9;top:auto;bottom:0;object-fit:contain}
+ .title-shade{background:linear-gradient(180deg,#121214 0%,#121214 43%,#12121400 72%)}
+ .title-copy{padding:35px 19px 0}.title-copy h1{font-size:86px;margin-bottom:18px}
+ .title-copy .subtitle{font-size:25px;line-height:1.24;margin-bottom:20px}.title-copy .authors{font-size:12px}
+ .title-controls{bottom:12px;right:12px;gap:7px}.title-controls button{font-size:11px;padding:6px 10px}
+ .attention-headline{font-size:29px;margin-bottom:24px}.hero-stage-head{font-size:12px;flex-wrap:wrap;gap:7px}.hero-stage-head button{margin-left:auto}
+ .hero-column-labels{font-size:14px}
+}

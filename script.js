@@ -181,6 +181,12 @@ let heroPlaying=!reducedMotion.matches;
 function updateHeroButton(){text('hero-motion',heroPlaying?'Pause videos Ⅱ':'Play videos ▷');$('hero-motion').setAttribute('aria-pressed',String(heroPlaying));}
 $('hero-motion').addEventListener('click',()=>{heroPlaying=!heroPlaying;updateHeroButton();document.querySelectorAll('[data-autoplay]').forEach(v=>{if(heroPlaying)v.play().catch(()=>{});else v.pause();});});
 updateHeroButton();
-const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(v.hasAttribute('data-autoplay')&&heroPlaying&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
-document.querySelectorAll('video').forEach(v=>{if(reducedMotion.matches&&v.hasAttribute('data-autoplay')){v.autoplay=false;v.pause();}mediaObserver.observe(v);});
+let titlePlaying=!reducedMotion.matches;
+const titleVideo=$('title-video');
+function updateTitleButton(){text('title-motion',titlePlaying?'Pause video Ⅱ':'Play video ▷');$('title-motion').setAttribute('aria-pressed',String(titlePlaying));}
+$('title-motion').addEventListener('click',()=>{titlePlaying=!titlePlaying;updateTitleButton();if(titlePlaying)titleVideo.play().catch(()=>{});else titleVideo.pause();});
+$('title-replay').addEventListener('click',()=>{titleVideo.currentTime=0;titlePlaying=true;updateTitleButton();titleVideo.play().catch(()=>{});});
+updateTitleButton();
+const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||(v.hasAttribute('data-title-autoplay')&&titlePlaying))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
+document.querySelectorAll('video').forEach(v=>{if(reducedMotion.matches&&(v.hasAttribute('data-autoplay')||v.hasAttribute('data-title-autoplay'))){v.autoplay=false;v.pause();}mediaObserver.observe(v);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());});

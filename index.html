@@ -7,27 +7,34 @@
   <meta name="description" content="INVAR learns visual invariance once from simulation. A frozen encoder lets policies trained on clean simulation transfer zero-shot to real robots.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261014-2">
-  <script src="script.js?v=20261014-2" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261015-1">
+  <script src="script.js?v=20261015-1" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <nav class="nav" aria-label="Page sections"><a class="wordmark" href="#top">INVAR<span>↗</span></a><div><a href="#idea">Idea</a><a href="#method">Method</a><a href="#results">Results</a><a href="#convergence">Learning</a><a href="#robustness">Robustness</a><a href="#analysis">Analysis</a><a href="#scaling">Scaling</a></div></nav>
 <header id="top" class="hero wrap">
-  <h1>INVAR</h1>
-  <p class="subtitle">Randomization-Invariant Visual Representations<br class="desktop"> for Zero-Shot Sim-to-Real</p>
-  <p class="authors">Anonymous Authors <span>·</span> Under review at ICLR 2027</p>
-  <div class="actions"><a class="button primary" href="#results"><span aria-hidden="true">▷</span> Real-robot results</a><a class="button" href="#method">Explore the method <span aria-hidden="true">↓</span></a></div>
-  <p class="resource-note">Paper available through the review submission. Code coming soon.</p>
+  <div class="title-film">
+    <video id="title-video" data-title-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/title-montage.jpg" src="assets/story/title-montage.mp4" aria-label="Real robot rollout montage: pouring expands into a grid of grasping, mug flipping, and bimanual manipulation across scenes"></video>
+    <div class="title-shade" aria-hidden="true"></div>
+    <div class="title-copy"><h1>INVAR</h1>
+      <p class="subtitle">Randomization-Invariant Visual Representations<br class="desktop"> for Zero-Shot Sim-to-Real</p>
+      <p class="authors">Anonymous Authors <span>·</span> Under review at ICLR 2027</p>
+    </div>
+    <div class="title-controls"><button type="button" id="title-replay">Replay intro ↻</button><button type="button" id="title-motion" aria-pressed="true">Pause video Ⅱ</button></div>
+  </div>
+  <div class="hero-body">
+  <h2 class="attention-headline">One frozen representation across<br class="desktop"> embodiments, tasks and scenes.</h2>
   <div class="hero-attention">
-    <div class="hero-stage-head"><span class="live-dot"></span> Frozen encoders, in the real world <button type="button" id="hero-motion" aria-pressed="true">Pause videos <span aria-hidden="true">Ⅱ</span></button></div>
-    <div class="hero-column-labels"><span>RGB observation</span><span class="ours-label">INVAR <small>❄ frozen encoder</small></span><span>DINOv3 <small>❄ frozen encoder</small></span></div>
+    <div class="hero-stage-head"><span class="live-dot"></span> Encoder attention map for real world rollouts <button type="button" id="hero-motion" aria-pressed="true">Pause videos <span aria-hidden="true">Ⅱ</span></button></div>
+    <div class="hero-column-labels"><span>RGB observation</span><span class="ours-label">INVAR</span><span>DINOv3</span></div>
     <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/hero-pour.jpg" src="assets/story/hero-pour.mp4" aria-label="Pouring: original observation, INVAR attention, and DINOv3 attention"></video><figcaption><span>01</span> Dexterous pouring <small>Attention follows the bottle, bowl, and interaction.</small></figcaption></figure>
-    <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/hero-bottles.jpg" src="assets/story/hero-bottles.mp4" aria-label="Bottles into a bin: original observation, INVAR attention, and DINOv3 attention"></video><figcaption><span>02</span> Bimanual manipulation <small>One frozen representation across tasks.</small></figcaption></figure>
+    <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/hero-bottles.jpg" src="assets/story/hero-bottles.mp4" aria-label="Bottles into a bin: original observation, INVAR attention, and DINOv3 attention"></video><figcaption><span>02</span> Bimanual manipulation</figcaption></figure>
   </div>
   <div class="tldr"><strong>TL;DR</strong><p>Learn visual invariance <em>once</em>. INVAR turns paired clean and randomized simulation renders into a reusable visual encoder. Freeze it, train a policy on clean simulation, and deploy zero-shot on real robots.</p></div>
   <div class="facts"><div><strong>≈2×</strong><span>real-world success<br>vs. the strongest suite baseline</span></div><div><strong>6.3M</strong><span>paired simulation renders<br>for representation pretraining</span></div><div><strong>3</strong><span>simulated embodiments<br>in one reusable encoder</span></div><div><strong>0</strong><span>real-world images<br>for INVAR adaptation</span></div></div>
   <p class="small center">INVAR adapts a pretrained DINOv3 backbone using simulation only. Downstream policies use no real-robot training data.</p>
+  </div>
 </header>
 <main id="main">
 <section id="idea" class="section wrap">

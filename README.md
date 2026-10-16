@@ -39,3 +39,5 @@ All website videos default to 2× playback speed, including newly selected task 
 The method pairs eight synchronized randomized head/left-wrist/right-wrist renders with the same clean simulator state. The feature-alignment diagram separates projection, teacher centering, softmax, and the detached action probe. Across-task pretraining data is grouped into bimanual tasks and dexterous object grasping. The Sharpa motion illustration is a cropped excerpt (84–96 seconds) of [EigenDEXplore’s published overview video](https://eigendexplore.github.io/videos/overview.mp4), credited beside the player.
 
 Results are organized by embodiment and task, followed by convergence and robustness within the same Results section.
+
+The state-matching schematic branches from one simulator state to clean/randomized three-camera renders and links their similar features. Rollout players automatically start muted at 2× when visible, while respecting reduced-motion preferences. The scaling selector includes object/task diversity from paper Table 3 alongside embodiment diversity and data scale from Table 2.

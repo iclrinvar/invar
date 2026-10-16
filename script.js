@@ -13,7 +13,7 @@ function setVideo(id, name, label, legacy = false) {
   video.src = legacy ? `assets/videos/${name}.mp4` : asset(name, 'mp4');
   video.setAttribute('aria-label', label);
   video.load();
-  if (resume) video.play().catch(() => {});
+  if (resume || (video.hasAttribute("data-rollout-autoplay") && !reducedMotion.matches && video.getBoundingClientRect().bottom>0 && video.getBoundingClientRect().top<innerHeight)) video.play().catch(() => {});
 }
 function bindGroup(attribute, callback) {
   const buttons = [...document.querySelectorAll(`button[${attribute}]`)];
@@ -49,7 +49,7 @@ function showStep(value) {
   const [kicker,title,copy] = steps[methodStep];
   text('step-kicker',kicker); text('step-title',title); text('step-copy',copy);
   $('distill-stage').dataset.step = methodStep;
-  requestAnimationFrame(positionEmaConnector);
+  requestAnimationFrame(()=>{positionEmaConnector();positionStateConnectors();});
   document.querySelectorAll('[data-step]').forEach(button => {if(button.tagName === 'BUTTON')button.setAttribute('aria-pressed',String(Number(button.dataset.step)===methodStep));});
   document.querySelectorAll('[data-scene]').forEach(scene => {scene.hidden=Number(scene.dataset.scene)!==methodStep;if(scene.hidden)scene.querySelectorAll('video').forEach(v=>v.pause());});
 }
@@ -120,7 +120,7 @@ const tasks = {
   pour: {video:'invar-pour',tag:'UNSEEN OBJECT AND TASK',title:'Pour wine into a bowl',description:'The object instances and the pouring motion are absent from encoder pretraining.',caption:'Sharpa dexterous hand on a Tianji arm. Example real-world rollout.',ours:58,baseline:25,name:'DINOv3 with DR',note:'24 real-world rollouts per method. Strongest evaluated baseline for this task.'},
   bottles: {video:'invar-bottles',tag:'UNSEEN OBJECTS AND TASK',title:'Put bottles into a bin',description:'Both the target objects and the bottle-in-bin task concept are absent from encoder pretraining.',caption:'Bimanual parallel grippers on YAM arms. Example real-world rollout.',ours:83,baseline:46,name:'Frozen CAIP with DR',note:'24 real-world rollouts per method. Strongest evaluated baseline for this task.'},
   mug: {video:'invar-mug',tag:'UNSEEN OBJECT AND TASK',title:'Flip a mug',description:'The policy must grasp and reorient a mug in a task not seen during encoder pretraining.',caption:'Bimanual parallel-gripper platform. Example real-world rollout.',ours:46,baseline:21,name:'DINOv3 with DR',note:'24 real-world rollouts per method. Strongest evaluated baseline for this task.'},
-  grasp: {video:'grasp-spray',tag:'FIVE UNSEEN EVALUATION OBJECTS',title:'Grasp unseen objects',description:'Grasping appears in pretraining, but these five evaluation objects are held out. Select an object above to explore the talk’s task rollout gallery.',caption:'Spray bottle · example grasping rollout.',ours:62,baseline:35,name:'Frozen CAIP with DR',note:'Full five-object benchmark: 125 real-world rollouts per method, 25 per object. These rates are not individual-video scores.'}
+  grasp: {video:'grasp-spray',tag:'FIVE UNSEEN EVALUATION OBJECTS',title:'Grasp unseen objects',description:'Grasping appears in pretraining, but these five evaluation objects are held out.',caption:'Spray bottle · example grasping rollout.',ours:62,baseline:35,name:'Frozen CAIP with DR',note:'Full five-object benchmark: 125 real-world rollouts per method, 25 per object. These rates are not individual-video scores.'}
 };
 const graspObjects = {spray:'Spray bottle',glass:'Wine glass',watering:'Watering can',tape:'Tape',hammer:'Hammer'};
 let activeObject='spray';
@@ -204,11 +204,13 @@ $('analysis-speed').addEventListener('click',()=>{const speed=analysisVideo.play
 $('analysis-expand').addEventListener('click',()=>{const stage=document.querySelector('.analysis-stage');if(stage.requestFullscreen)stage.requestFullscreen().catch(()=>{});else if(analysisVideo.webkitEnterFullscreen)analysisVideo.webkitEnterFullscreen();});
 const scales = {
  diversity: {labels:['All three embodiments','Dexterous hand + gripper','Single embodiment'],values:[[84,71,63],[83,67,58]]},
+ tasks: {labels:[['20 objects','10 objects','5 objects'],['5 tasks','2 tasks']],values:[[63,58,54],[58,50]]},
  size: {labels:['100% of pairs','50% of pairs','25% of pairs'],values:[[84,71,58],[83,67,50]]}
 };
 function renderScale(key){
  const {labels,values}=scales[key];
- $('scaling-charts').innerHTML = ['Dexterous hand','Parallel gripper'].map((name,i) => `<div><h3>${name}</h3><span class="chart-label">Real-world success rate</span>${labels.map((label,j)=>`<div class="scale-row"><div><span>${label}</span><strong>${values[i][j]}%</strong></div><div class="track" aria-hidden="true"><span style="width:${values[i][j]}%"></span></div></div>`).join('')}</div>`).join('');
+ text('scaling-source',key==='tasks'?'Paper Table 3. Single-embodiment object and task diversity.':'Paper Table 2.');
+ $('scaling-charts').innerHTML = ['Dexterous hand','Parallel gripper'].map((name,i) => `<div><h3>${name}</h3><span class="chart-label">Real-world success rate</span>${(Array.isArray(labels[i])?labels[i]:labels).map((label,j)=>`<div class="scale-row"><div><span>${label}</span><strong>${values[i][j]}%</strong></div><div class="track" aria-hidden="true"><span style="width:${values[i][j]}%"></span></div></div>`).join('')}</div>`).join('');
 }
 bindGroup('data-scale',renderScale);renderScale('diversity');
 // Ambient hero clips pause out of view, with a persistent manual control.
@@ -222,8 +224,25 @@ function updateTitleButton(){text('title-motion',titlePlaying?'Pause video Ⅱ':
 $('title-motion').addEventListener('click',()=>{titlePlaying=!titlePlaying;updateTitleButton();if(titlePlaying)titleVideo.play().catch(()=>{});else titleVideo.pause();});
 $('title-replay').addEventListener('click',()=>{titleVideo.currentTime=0;titlePlaying=true;updateTitleButton();titleVideo.play().catch(()=>{});});
 updateTitleButton();
-const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||(v.hasAttribute('data-title-autoplay')&&titlePlaying)||(v.hasAttribute('data-gallery-autoplay')&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
+const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||(v.hasAttribute('data-title-autoplay')&&titlePlaying)||((v.hasAttribute('data-gallery-autoplay')||v.hasAttribute('data-rollout-autoplay'))&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
 document.querySelectorAll('video').forEach(v=>{if(reducedMotion.matches&&(v.hasAttribute('data-autoplay')||v.hasAttribute('data-title-autoplay'))){v.autoplay=false;v.pause();}mediaObserver.observe(v);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());});
 
 showStep(0);
+
+function positionStateConnectors(){
+ const canvas=document.querySelector('.state-match-canvas');if(canvas.closest('[data-scene]').hidden)return;
+ const box=canvas.getBoundingClientRect(),state=canvas.querySelector('.shared-state').getBoundingClientRect();
+ const relative=el=>{const r=el.getBoundingClientRect();return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height};};
+ const mobile=innerWidth<=700;
+ const sx=mobile?state.left-box.left+state.width*.25:state.right-box.left,sy=state.top-box.top+state.height*(mobile?1:.5);
+ for(const [row,id] of [['randomized','state-random-path'],['clean','state-clean-path']]){
+  const target=relative(canvas.querySelector(`.${row} .invariance-input>.node-label`));
+  const x=target.x-7,y=target.y+target.h/2,branch=mobile?10:sx+14;
+  $(id).setAttribute('d',`M ${sx} ${sy} H ${branch} V ${y} H ${x}`);
+ }
+ const first=relative(canvas.querySelector('.randomized .invariance-features')),second=relative(canvas.querySelector('.clean .invariance-features'));
+ const x=first.x+first.w/2;
+ $('similarity-path').setAttribute('d',mobile?`M ${first.x+first.w+2} ${first.y+first.h/2} H ${box.width-2} V ${second.y+second.h/2} H ${second.x+second.w+2}`:`M ${x} ${first.y+first.h+5} V ${second.y-5}`);
+}
+new ResizeObserver(positionStateConnectors).observe(document.querySelector('.state-match-canvas'));

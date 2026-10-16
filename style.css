@@ -225,3 +225,27 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 
 .results-subsection{margin-top:48px;padding-top:40px}.results-subsection .section-heading h2{font-size:clamp(28px,3.4vw,38px)}
 @media(max-width:700px){.results-subsection{margin-top:32px;padding-top:30px}}
+
+/* One simulator state branches into both renderings; feature outputs stay linked. */
+.method-scene[data-scene="0"]>.variant-toolbar{margin:0 0 12px;padding:0;border:0}
+.variant-toolbar #variation{border:1px solid #dcc58266;border-radius:12px;background:#dcc58212;padding:10px 15px;font-size:14px}
+.randomization-labels{margin:0 0 30px;color:#bfbfcd;font-size:14px;text-align:right}
+.randomization-labels em{color:#e2cc91;font-style:italic;margin-right:5px}
+.state-match-canvas{position:relative;display:grid;grid-template-columns:90px minmax(0,1fr);gap:40px;align-items:center}
+.shared-state{text-align:center;border:1px solid #d6c38866;background:#d6c3880c;border-radius:15px;padding:20px 6px;z-index:1}
+.shared-state span{display:block;font-size:9px;letter-spacing:.1em;color:#b5ac91}.shared-state strong{display:block;font-size:15px;color:#e6dbb9;margin-top:5px}.shared-state i{display:block;font:italic 30px Georgia,serif;color:#dfce98;margin-top:8px}
+.state-connectors{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.state-connectors>path{stroke:#cdbb83;stroke-width:1.4;fill:none}
+.invariance-pair{position:relative;min-width:0}.invariance-pair .invariance-row{grid-template-columns:minmax(0,3.8fr) 16px 90px 16px 105px;gap:10px}
+.invariance-pair .feature-similarity{height:85px;display:flex;align-items:center;justify-content:center;flex-direction:column;width:125px;margin-left:auto;position:relative;left:10px}
+.feature-similarity strong{font-size:28px;line-height:1;background:#29292c;padding:0 7px;color:#e3cb87}.feature-similarity span{background:#29292c;font-size:12px;color:#ded0a8;text-align:center;padding:4px 6px;line-height:1.3}
+.normalization-sequence{display:flex;gap:6px;align-items:center;justify-content:flex-end;min-height:120px}
+.normalization-slab{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;height:120px;width:36px;border:1px solid #aa9ac477;background:#ab9bc414;border-radius:11px;color:#d5cee3;font-size:15px}
+@media(max-width:1000px) and (min-width:701px){.state-match-canvas{grid-template-columns:75px minmax(0,1fr);gap:30px}.invariance-pair .invariance-row{grid-template-columns:minmax(0,3fr) 12px 75px 12px 85px;gap:7px}.invariance-pair .feature-similarity{width:105px}.invariance-encoder strong{font-size:16px}}
+@media(max-width:700px){
+ .method-scene[data-scene="0"]>.variant-toolbar{flex-direction:column-reverse;align-items:stretch;gap:15px}.variant-toolbar #variation{align-self:flex-start;margin-left:0}.variant-toolbar>div>span{display:none}
+ .randomization-labels{text-align:left;font-size:13px;margin-bottom:20px}
+ .state-match-canvas{display:block;padding-right:18px}.shared-state{width:135px;margin:0 auto 25px;padding:10px}.shared-state i{display:inline;margin-left:8px;font-size:24px}.shared-state strong{display:inline;font-size:16px}
+ .invariance-pair{padding-left:24px}.invariance-pair .invariance-row{grid-template-columns:minmax(0,1fr) 15px minmax(0,1fr);gap:8px}
+ .invariance-pair .feature-similarity{width:100%;left:0;height:65px;flex-direction:row;gap:5px}.feature-similarity span{font-size:12px}.feature-similarity strong,.feature-similarity span{background:transparent}
+ .camera-set{gap:4px}.camera-set figcaption{font-size:9px}.invariance-encoder strong{font-size:16px}.invariance-features>span{font-size:10px}
+}

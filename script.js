@@ -1,7 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
-// Apply double-speed playback to initial videos and every replacement source.
-function configureVideo(video){video.defaultPlaybackRate=2;video.playbackRate=2;video.addEventListener('loadedmetadata',()=>{video.playbackRate=2;});}
+// Default to 2× playback; the title montage opts into 3×.
+function configureVideo(video){const rate=Number(video.dataset.playbackRate)||2;video.defaultPlaybackRate=rate;video.playbackRate=rate;video.addEventListener('loadedmetadata',()=>{video.playbackRate=rate;});}
 document.querySelectorAll('video').forEach(configureVideo);
 const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}`;
 function text(id, value) { $(id).textContent = value; }
@@ -26,19 +26,19 @@ bindGroup('data-approach', value => {
   const ours = value === 'invar';
   $('approach-stage').dataset.mode = value;
   document.querySelectorAll('.random-source,.random-edge').forEach(el => el.hidden = ours);
-  text('input-caption', ours ? 'Nominal renders for each new policy' : 'Start from the nominal scene');
+  text('input-caption', ours ? 'Clean images for each new policy' : 'Start from the nominal scene');
   text('encoder-state', ours ? 'FROZEN ENCODER' : 'FROZEN / FINETUNED');
   $('idea-snowflake').hidden=!ours;
   document.querySelector('.encoder').classList.toggle('frozen',ours);
   text('encoder-name', ours ? 'INVAR' : 'Vision encoder');
   text('output-caption', ours ? 'Zero-shot transfer' : 'Appearance changes can disrupt execution');
   setVideo('approach-video', ours ? 'invar-bottles' : 'baseline-bottles', ours ? 'INVAR real-world bottle manipulation example' : 'Prior approach bottle manipulation failure example');
-  $('approach-explanation').innerHTML = ours ? '<strong>Randomize once, during encoder pretraining.</strong> Freeze INVAR, then learn downstream behavior with clean simulation data. The representation is shared across tasks.' : '<strong>Clean simulation → randomized simulation → policy learning.</strong> Each new task needs its own randomized data. The policy must learn control and visual invariance together.';
+  $('approach-explanation').innerHTML = ours ? '<strong>Randomize once, during encoder pretraining.</strong> Freeze INVAR and train each new policy on clean simulation images.' : '<strong>Clean simulation → randomized simulation → policy learning.</strong> Each new task needs its own randomized data. Each policy learns the task and how to handle changes in appearance.';
 });
 const steps = [
-  ['STATE-MATCHED RENDERING', 'Change appearance, preserve the scene.', 'Clean and randomized images show the same robot and object state from the head and both wrist cameras. INVAR learns to retain manipulation-relevant information while ignoring changes in lighting, materials, table appearance, and background.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
-  ['ASYMMETRIC SELF-DISTILLATION', 'Align a randomized student to a clean teacher.', 'The student matches the teacher’s output distribution with a CLS self-distillation loss. Gradients update the student; an exponential moving average updates the teacher. The teacher always receives clean views.', 'Student(randomized) ≈ Teacher(clean)<br><span>CLS loss · stop-gradient teacher · EMA update</span>'],
-  ['DOWNSTREAM POLICY LEARNING', 'Freeze the encoder. Learn new behavior.', 'After pretraining, the encoder stays fixed. A behavior-cloning policy learns on clean simulation images, then uses the same visual representation on the real robot. New policies reuse the learned visual invariance.', 'Clean image → frozen INVAR → policy<br><span>Simulation training → zero-shot deployment</span>']
+  ['STATE-MATCHED RENDERING', 'Change the appearance, keep the state.', 'The head and wrist cameras see the same robot and objects in both renders. Only the lighting, materials, table texture, and background change. INVAR learns to give these views similar features.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
+  ['ASYMMETRIC SELF-DISTILLATION', 'Match the teacher’s features.', 'The student learns to match the teacher’s output on the clean image. Gradients update the student, and a moving average of its weights updates the teacher.', 'Student(randomized) ≈ Teacher(clean)<br><span>CLS loss · stop-gradient teacher · EMA update</span>'],
+  ['DOWNSTREAM POLICY LEARNING', 'Freeze INVAR and train a policy.', 'Keep the pretrained encoder fixed and train a policy on clean simulation images. Use both on the real robot, with no further training.', 'Clean image → frozen INVAR → policy<br><span>Simulation training → zero-shot deployment</span>']
 ];
 let methodStep = 0;
 let touring = false;
@@ -117,17 +117,17 @@ bindGroup('data-gallery', key => {
   }));
 });
 const tasks = {
-  pour: {video:'invar-pour',tag:'UNSEEN OBJECT AND TASK',title:'Pour wine into a bowl',description:'The object instances and the pouring motion are absent from encoder pretraining.',caption:'Sharpa dexterous hand on a Tianji arm. Example real-world rollout.',ours:58,baseline:25,name:'DINOv3 with DR',note:'24 real-world rollouts per method. Strongest evaluated baseline for this task.'},
-  bottles: {video:'invar-bottles',tag:'UNSEEN OBJECTS AND TASK',title:'Put bottles into a bin',description:'Both the target objects and the bottle-in-bin task concept are absent from encoder pretraining.',caption:'Bimanual parallel grippers on YAM arms. Example real-world rollout.',ours:83,baseline:46,name:'Frozen CAIP with DR',note:'24 real-world rollouts per method. Strongest evaluated baseline for this task.'},
-  mug: {video:'invar-mug',tag:'UNSEEN OBJECT AND TASK',title:'Flip a mug',description:'The policy must grasp and reorient a mug in a task not seen during encoder pretraining.',caption:'Bimanual parallel-gripper platform. Example real-world rollout.',ours:46,baseline:21,name:'DINOv3 with DR',note:'24 real-world rollouts per method. Strongest evaluated baseline for this task.'},
-  grasp: {video:'grasp-spray',tag:'FIVE UNSEEN EVALUATION OBJECTS',title:'Grasp unseen objects',description:'Grasping appears in pretraining, but these five evaluation objects are held out.',caption:'Spray bottle · example grasping rollout.',ours:62,baseline:35,name:'Frozen CAIP with DR',note:'Full five-object benchmark: 125 real-world rollouts per method, 25 per object. These rates are not individual-video scores.'}
+  pour: {video:'invar-pour',tag:'UNSEEN OBJECT AND TASK',title:'Pour wine into a bowl',description:'Neither these objects nor the pouring task appears in encoder pretraining.',caption:'Sharpa hand on a Tianji arm.',ours:58,baseline:25,name:'DINOv3 with DR',note:'24 real-world trials per method, compared with the strongest tested baseline.'},
+  bottles: {video:'invar-bottles',tag:'UNSEEN OBJECTS AND TASK',title:'Put bottles into a bin',description:'The objects and the bottle-in-bin task are new to the pretrained encoder.',caption:'Parallel grippers on two YAM arms.',ours:83,baseline:46,name:'Frozen CAIP with DR',note:'24 real-world trials per method, compared with the strongest tested baseline.'},
+  mug: {video:'invar-mug',tag:'UNSEEN OBJECT AND TASK',title:'Flip a mug',description:'The robot grasps and flips a mug—a task not used in encoder pretraining.',caption:'Bimanual parallel grippers.',ours:46,baseline:21,name:'DINOv3 with DR',note:'24 real-world trials per method, compared with the strongest tested baseline.'},
+  grasp: {video:'grasp-spray',tag:'FIVE UNSEEN EVALUATION OBJECTS',title:'Grasp unseen objects',description:'The encoder sees grasping during pretraining, but none of these five objects.',caption:'Spray bottle · grasping trial.',ours:62,baseline:35,name:'Frozen CAIP with DR',note:'Success across all five objects: 125 trials per method, 25 per object.'}
 };
 const graspObjects = {spray:'Spray bottle',glass:'Wine glass',watering:'Watering can',tape:'Tape',hammer:'Hammer'};
 let activeObject='spray';
 function showGraspObject(key){
  activeObject=key;
  setVideo('result-video',`grasp-${key}`,`${graspObjects[key]} grasping rollout`);
- text('result-video-caption',`${graspObjects[key]} · example grasping rollout from the talk.`);
+ text('result-video-caption',`${graspObjects[key]} · grasping trial.`);
  document.querySelectorAll('[data-object]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.object===key)));
 }
 bindGroup('data-object',showGraspObject);
@@ -155,33 +155,33 @@ function showPlatform(key){
 }
 bindGroup('data-platform',showPlatform);showPlatform('dex');
 const robustness = {
-  watering:['Watering-can grasping trials under varied visual conditions','Dexterous grasping of a watering can across varied real-world scenes. Each tile shows a separate rollout.'],
-  spray:['Spray-bottle grasping trials under varied visual conditions','Dexterous grasping of a spray bottle under varied lighting, surfaces, and backgrounds. Each tile shows a separate rollout.'],
-  mug:['Mug-flipping trials under varied visual conditions','Mug flipping with bimanual parallel grippers across varied real-world conditions. Each tile shows a separate rollout.'],
-  bottles:['Bottle manipulation trials under varied visual conditions','Bottles into a bin with bimanual parallel grippers across varied real-world conditions. Each tile shows a separate rollout.']
+  watering:['Watering-can grasping trials under varied visual conditions','Watering-can grasps under different lighting and surface conditions. Each tile is one trial.'],
+  spray:['Spray-bottle grasping trials under varied visual conditions','Spray-bottle grasps with different lighting, surfaces, and backgrounds. Each tile is one trial.'],
+  mug:['Mug-flipping trials under varied visual conditions','Mug flipping under different lighting and surface conditions. Each tile is one trial.'],
+  bottles:['Bottle manipulation trials under varied visual conditions','Bottles into a bin under different lighting and surface conditions. Each tile is one trial.']
 };
 bindGroup('data-robust',key => {setVideo('robust-video',`robust-${key}`,robustness[key][0]);text('robust-caption',robustness[key][1]);});
 const analysisSets={
  attention:[
-  ['attention-robot','Spray bottle','Last-block CLS attention on spray-bottle grasping. INVAR focuses on the manipulated object and contact regions; background appearance receives less attention.'],
-  ['attn-watering','Watering can','Attention during a real watering-can grasp. Compare how the frozen encoders respond to the object, hand, cast shadows, and a person behind the workspace.'],
-  ['attn-glass','Wine glass','Attention during wine-glass grasping. The same real observation is passed through each frozen encoder.'],
-  ['attn-hammer','Hammer','Attention on a real hammer manipulation sequence. INVAR emphasizes the hammer and contact region despite changes in the background.'],
-  ['attn-bottles','Bimanual','Attention on a bimanual robot sequence. This source clip includes a failed rollout; it is used to inspect visual representations rather than demonstrate policy success.'],
-  ['attention-human','Human pouring','Attention on human egocentric pouring, outside INVAR’s simulation adaptation data. INVAR emphasizes the manipulated cup, bottle, and contact regions.']
+  ['attention-robot','Spray bottle','Last-block CLS attention during a spray-bottle grasp. INVAR responds to the bottle and contact areas more than the background.'],
+  ['attn-watering','Watering can','Attention during a watering-can grasp. Compare responses to the hand, object, shadows, and person in the background.'],
+  ['attn-glass','Wine glass','Attention during a wine-glass grasp. All encoders receive the same image.'],
+  ['attn-hammer','Hammer','Attention during hammer manipulation. INVAR responds to the hammer and the hand’s contact with it.'],
+  ['attn-bottles','Bimanual','Attention during bimanual manipulation. This trial fails; the clip shows the encoder responses during that failure.'],
+  ['attention-human','Human pouring','Attention during human pouring, viewed from a head-mounted camera. INVAR responds to the cup, bottle, and contact areas, although it was adapted only on simulation images.']
  ],
  pca:[
-  ['pca-bottles','Bimanual','Patch-feature PCA on real bottle manipulation. INVAR merges shadows and bystanders into the background feature region while keeping grippers and manipulated objects distinct.'],
-  ['pca-pour','Wine glass','Patch-feature PCA during real wine-glass manipulation. Compare the organization of the object, robot, and background across encoders.'],
-  ['pca-watering','Watering can','Patch-feature PCA on a real watering-can sequence. Stable object and robot features persist as the scene changes.'],
-  ['pca-sim-hammer','Simulation','Patch-feature PCA on simulated hammer grasping. This view shows how each representation organizes nominal simulation before the real-world appearance shift.']
+  ['pca-bottles','Bimanual','Patch-feature PCA during bottle manipulation. INVAR separates the grippers and objects from shadows and people in the background.'],
+  ['pca-pour','Wine glass','Patch-feature PCA during wine-glass manipulation. Compare the features on the glass, hand, and background.'],
+  ['pca-watering','Watering can','Patch-feature PCA during a watering-can grasp. The object and hand remain distinct as the scene changes.'],
+  ['pca-sim-hammer','Simulation','Patch-feature PCA during simulated hammer grasping, before any change to real-world appearance.']
  ]
 };
 let analysisMode='attention';
 function showAnalysisExample(index){
  const [file,label,caption]=analysisSets[analysisMode][index];
  setVideo('analysis-video',file,`${label}: RGB, INVAR, DINOv3, CAIP ${analysisMode==='pca'?'patch PCA':'attention'}`);
- text('analysis-caption',caption+(analysisMode==='pca'?' Colors visualize principal components of patch features, not semantic class labels.':''));
+ text('analysis-caption',caption+(analysisMode==='pca'?' Colors show principal components of the features, not object labels.':''));
  document.querySelectorAll('[data-example]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.example)===index)));
 }
 function showAnalysis(key){
@@ -220,9 +220,10 @@ $('hero-motion').addEventListener('click',()=>{heroPlaying=!heroPlaying;updateHe
 updateHeroButton();
 let titlePlaying=!reducedMotion.matches;
 const titleVideo=$('title-video');
-function updateTitleButton(){text('title-motion',titlePlaying?'Pause video Ⅱ':'Play video ▷');$('title-motion').setAttribute('aria-pressed',String(titlePlaying));}
+function updateTitleButton(){$('title-motion').hidden=titleVideo.ended;text('title-motion',titlePlaying?'Pause video Ⅱ':titleVideo.ended?'Replay video ↻':'Play video ▷');$('title-motion').setAttribute('aria-pressed',String(titlePlaying));}
 $('title-motion').addEventListener('click',()=>{titlePlaying=!titlePlaying;updateTitleButton();if(titlePlaying)titleVideo.play().catch(()=>{});else titleVideo.pause();});
 $('title-replay').addEventListener('click',()=>{titleVideo.currentTime=0;titlePlaying=true;updateTitleButton();titleVideo.play().catch(()=>{});});
+titleVideo.addEventListener('ended',()=>{titlePlaying=false;updateTitleButton();});
 updateTitleButton();
 const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||(v.hasAttribute('data-title-autoplay')&&titlePlaying)||((v.hasAttribute('data-gallery-autoplay')||v.hasAttribute('data-rollout-autoplay'))&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
 document.querySelectorAll('video').forEach(v=>{if(reducedMotion.matches&&(v.hasAttribute('data-autoplay')||v.hasAttribute('data-title-autoplay'))){v.autoplay=false;v.pause();}mediaObserver.observe(v);});

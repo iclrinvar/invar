@@ -271,3 +271,15 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 .title-copy{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);padding:0 28px}
 .title-copy .authors{margin-bottom:0}
 @media(max-width:700px){.title-copy{padding:0 19px}}
+
+/* Original scaling figures from the research talk. */
+.scaling-overview{margin:0 0 36px;padding:26px 20px 18px;background:#fff;border:1px solid var(--line);border-radius:20px}
+.scaling-overview img{width:100%}
+.scaling-overview figcaption,.scaling-data figcaption{font-size:15px;color:var(--muted);line-height:1.6;margin-top:16px}
+.scaling-data{margin:0 0 24px;padding:26px;background:#fff;border:1px solid var(--line);border-radius:20px}
+#scaling-embodiments{max-width:760px;margin:auto}
+#scaling-task-sets{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start}
+#scaling-task-sets h3{font-size:24px;margin:0 0 20px}
+#scaling-task-sets img{width:100%;height:330px;object-fit:contain;object-position:top}
+@media(max-width:700px){.scaling-overview{padding:12px;overflow-x:auto}.scaling-overview img{min-width:720px}.scaling-overview figcaption{font-size:13px}.scaling-data{padding:18px}#scaling-task-sets{grid-template-columns:1fr}#scaling-task-sets img{height:auto}}
+.scaling-overview,.scaling-data{color:#22282d}.scaling-overview figcaption,.scaling-data figcaption{color:#56616c}

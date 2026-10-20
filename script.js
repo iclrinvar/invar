@@ -171,7 +171,9 @@ const analysisSets={
   ['attn-watering','Watering can','Attention during a watering-can grasp. Compare responses to the hand, object, shadows, and person in the background.'],
   ['attn-glass','Wine glass','Attention during a wine-glass grasp. All encoders receive the same image.'],
   ['attn-hammer','Hammer','Attention during hammer manipulation. INVAR responds to the hammer and the hand’s contact with it.'],
-  ['attn-bottles','Bimanual','Attention during bimanual manipulation. This trial fails; the clip shows the encoder responses during that failure.'],
+  ['attn-bottles','Bimanual','Attention during bimanual manipulation. This trial fails; the clip shows the encoder responses during that failure.']
+ ],
+ human:[
   ['attention-human','Human pouring','Attention during human pouring, viewed from a head-mounted camera. INVAR responds to the cup, bottle, and contact areas, although it was adapted only on simulation images.']
  ],
  pca:[
@@ -189,7 +191,7 @@ function showAnalysisExample(index){
  document.querySelectorAll('[data-example]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.example)===index)));
 }
 function showAnalysis(key){
- const matches=key==='correspondence';$('analysis-video').pause();$('analysis-video').hidden=matches;$('analysis-image').hidden=!matches;$('analysis-labels').hidden=matches;$('analysis-examples').hidden=matches;$('analysis-transport').hidden=matches;
+ const matches=key==='correspondence';$('analysis-video').pause();$('analysis-video').hidden=matches;$('analysis-image').hidden=!matches;$('analysis-labels').hidden=matches;$('analysis-examples').hidden=matches||key==='human';$('human-attention-note').hidden=key!=='human';$('analysis-transport').hidden=matches;
  if(matches){text('analysis-caption','Simulation queries (top) and nearest real-image matches (bottom), using cosine similarity. INVAR recovers the bowl, bottle, fingertip, and forearm in this example. DINOv3 confuses robot parts, while CAIP maps several queries to the background.');return;}
  analysisMode=key;$('analysis-examples').setAttribute('aria-label',`${key==='pca'?'Feature PCA':'Attention'} example`);
  $('analysis-examples').replaceChildren(...analysisSets[key].map((entry,i)=>{const b=document.createElement('button');b.type='button';b.dataset.example=i;b.textContent=entry[1];b.setAttribute('aria-pressed',String(i===0));b.addEventListener('click',()=>showAnalysisExample(i));return b;}));
@@ -213,6 +215,7 @@ const scales = {
 };
 function renderScale(key){
  const {labels,values}=scales[key];
+ $('scaling-data').hidden=key==='size';$('scaling-embodiments').hidden=key!=='diversity';$('scaling-task-sets').hidden=key!=='tasks';
  text('scaling-source',key==='tasks'?'Paper Table 3. Single-embodiment object and task diversity.':'Paper Table 2.');
  $('scaling-charts').innerHTML = ['Dexterous hand','Parallel gripper'].map((name,i) => `<div><h3>${name}</h3><span class="chart-label">Real-world success rate</span>${(Array.isArray(labels[i])?labels[i]:labels).map((label,j)=>`<div class="scale-row"><div><span>${label}</span><strong>${values[i][j]}%</strong></div><div class="track" aria-hidden="true"><span style="width:${values[i][j]}%"></span></div></div>`).join('')}</div>`).join('');
 }

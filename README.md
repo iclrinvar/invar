@@ -41,3 +41,5 @@ The method pairs eight synchronized randomized head/left-wrist/right-wrist rende
 Results are organized by embodiment and task, followed by convergence and robustness within the same Results section.
 
 The state-matching schematic branches from one simulator state to clean/randomized three-camera renders and links their similar features. Rollout players automatically start muted at 2× when visible, while respecting reduced-motion preferences. The scaling selector includes object/task diversity from paper Table 3 alongside embodiment diversity and data scale from Table 2.
+
+Human pouring has a dedicated analysis tab. Its note distinguishes INVAR’s simulation-only adaptation from CAIP’s egocentric human-video pretraining. Scaling reuses the original overview, data-composition, and nested object/task figures from the supplied Genesis export (slides 135–138), with the paper’s per-embodiment values retained below.

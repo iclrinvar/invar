@@ -7,8 +7,8 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261020-1">
-  <script src="script.js?v=20261020-1" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261020-2">
+  <script src="script.js?v=20261020-2" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -17,7 +17,7 @@
   <div class="title-film">
     <div class="title-media"><div id="title-grid" class="title-grid title-intro">
       <video data-title-autoplay data-playback-rate="3" muted loop playsinline preload="metadata" poster="assets/story/title-tiles/grasp-spray.jpg" src="assets/story/title-tiles/grasp-spray.mp4" aria-label="Spray-bottle grasp"></video>
-      <video data-title-autoplay data-playback-rate="3" muted loop playsinline preload="metadata" poster="assets/story/title-tiles/invar-bottles.jpg" src="assets/story/title-tiles/invar-bottles.mp4" aria-label="Bottles into a bin"></video>
+      <video data-title-autoplay data-playback-rate="3" muted loop playsinline preload="metadata" poster="assets/story/title-tiles/invar-bottles.jpg" src="assets/story/title-tiles/invar-bottles.mp4?v=20261020-2" aria-label="Bottles into a bin"></video>
       <video data-title-autoplay data-playback-rate="3" muted loop playsinline preload="metadata" poster="assets/story/title-tiles/grasp-glass.jpg" src="assets/story/title-tiles/grasp-glass.mp4" aria-label="Wine-glass grasp"></video>
       <video data-title-autoplay data-playback-rate="3" muted loop playsinline preload="metadata" poster="assets/story/title-tiles/grasp-watering.jpg" src="assets/story/title-tiles/grasp-watering.mp4" aria-label="Watering-can grasp"></video>
       <video id="title-video" data-title-autoplay data-playback-rate="3" muted loop playsinline preload="metadata" poster="assets/story/title-tiles/invar-pour.jpg" src="assets/story/title-tiles/invar-pour.mp4" aria-label="Pour wine"></video>
@@ -62,7 +62,7 @@
     <div class="encoder network-block frozen"><span class="snowflake" id="idea-snowflake" aria-hidden="true">❄</span><strong id="encoder-name">INVAR</strong><small id="encoder-state">FROZEN ENCODER</small></div>
     <div class="flow-edge"><i></i></div><div class="policy"><span>TRAIN</span><strong>Policy π</strong></div>
     <div class="flow-edge"><i></i></div>
-    <figure class="approach-out"><span class="overline">Real-world deployment</span><video data-rollout-autoplay id="approach-video" controls muted loop playsinline preload="none" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4" aria-label="INVAR real-world bottle manipulation example"></video><figcaption id="output-caption">Zero-shot transfer</figcaption></figure>
+    <figure class="approach-out"><span class="overline">Real-world deployment</span><video data-rollout-autoplay id="approach-video" controls muted loop playsinline preload="none" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4?v=20261020-2" aria-label="INVAR real-world bottle manipulation example"></video><figcaption id="output-caption">Zero-shot transfer</figcaption></figure>
   </div>
   <p id="approach-explanation" class="callout" aria-live="polite"><strong>Randomize during encoder pretraining.</strong> Freeze INVAR and train each new policy on clean simulation images.</p>
 </section>
@@ -95,7 +95,7 @@
     <div class="method-scene" data-scene="2" hidden role="group" aria-label="A frozen encoder connects clean simulation training to real-world deployment">
       <div class="reuse-training"><figure><span class="node-label">CLEAN SIMULATION</span><img src="assets/story/clean-bottles.webp" alt="Clean simulation policy-training input"><figcaption>New downstream task</figcaption></figure><div class="flow-edge"><i></i></div><div class="network-block frozen"><span class="snowflake">❄</span><strong>INVAR</strong><small>FROZEN ENCODER</small></div><div class="flow-edge"><i></i></div><div class="network-block train-policy"><span>π</span><strong>Policy</strong><small>TRAIN IN SIMULATION</small></div></div>
       <div class="deployment-arrow"><span>Same frozen representation</span><i>↓</i></div>
-      <div class="reuse-deploy"><span class="node-label">ZERO-SHOT REAL-WORLD DEPLOYMENT</span><div><video data-rollout-autoplay controls muted loop playsinline preload="none" poster="assets/story/invar-pour.jpg" src="assets/story/invar-pour.mp4" aria-label="Dexterous pouring deployment with the frozen encoder"></video><video data-rollout-autoplay controls muted loop playsinline preload="none" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4" aria-label="Bimanual deployment with the frozen encoder"></video></div></div>
+      <div class="reuse-deploy"><span class="node-label">ZERO-SHOT REAL-WORLD DEPLOYMENT</span><div><video data-rollout-autoplay controls muted loop playsinline preload="none" poster="assets/story/invar-pour.jpg" src="assets/story/invar-pour.mp4" aria-label="Dexterous pouring deployment with the frozen encoder"></video><video data-rollout-autoplay controls muted loop playsinline preload="none" poster="assets/story/invar-bottles.jpg" src="assets/story/invar-bottles.mp4?v=20261020-2" aria-label="Bimanual deployment with the frozen encoder"></video></div></div>
     </div>
     <div class="step-description" aria-live="polite"><span class="overline" id="step-kicker">STATE-MATCHED RENDERING</span><h3 id="step-title">Change the appearance, keep the state.</h3><p id="step-copy">The robot and objects stay in the same positions. Only the lighting, materials, table texture, and background change.</p></div>
   </div>

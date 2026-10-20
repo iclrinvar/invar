@@ -3,7 +3,7 @@ const $ = id => document.getElementById(id);
 // Default to 2× playback; the title montage opts into 3×.
 function configureVideo(video){const rate=Number(video.dataset.playbackRate)||2;video.defaultPlaybackRate=rate;video.playbackRate=rate;video.addEventListener('loadedmetadata',()=>{video.playbackRate=rate;});}
 document.querySelectorAll('video').forEach(configureVideo);
-const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}`;
+const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}${name==='invar-bottles'&&ext==='mp4'?'?v=20261020-2':''}`;
 function text(id, value) { $(id).textContent = value; }
 function setVideo(id, name, label, legacy = false) {
   const video = $(id);

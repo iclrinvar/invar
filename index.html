@@ -7,12 +7,12 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261020-2">
-  <script src="script.js?v=20261020-2" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261020-3">
+  <script src="script.js?v=20261020-3" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<nav class="nav" aria-label="Page sections"><a class="wordmark" href="#top">INVAR<span>↗</span></a><div><a href="#idea">Idea</a><a href="#method">Method</a><a href="#results">Results</a><a href="#analysis">Analysis</a><a href="#scaling">Scaling</a></div></nav>
+<nav class="nav" aria-label="Page sections"><a class="wordmark" href="#top">INVAR<span>↗</span></a><div><a href="#idea">Idea</a><a href="#analysis">Analysis</a><a href="#method">Method</a><a href="#results">Results</a><a href="#scaling">Scaling</a></div></nav>
 <header id="top" class="hero wrap">
   <div class="title-film">
     <div class="title-media"><div id="title-grid" class="title-grid title-intro">
@@ -66,9 +66,19 @@
   </div>
   <p id="approach-explanation" class="callout" aria-live="polite"><strong>Randomize during encoder pretraining.</strong> Freeze INVAR and train each new policy on clean simulation images.</p>
 </section>
+<section id="analysis" class="section tinted">
+ <div class="wrap">
+ <div class="section-heading"><span class="index">02 / INSIDE THE REPRESENTATION</span><h2>Visual invariance across <br>the sim-to-real gap.</h2><p>Attention maps, patch-level PCA, and sim-to-real patch correspondence show how INVAR suppresses task-irrelevant appearance variation while preserving manipulation-relevant structure.</p></div>
+ <div class="switcher" role="group" aria-label="Representation analysis"><button type="button" data-analysis="attention" aria-pressed="true">Attention</button><button type="button" data-analysis="pca" aria-pressed="false">Feature PCA</button><button type="button" data-analysis="correspondence" aria-pressed="false">Sim-to-real matches</button></div>
+ <div class="example-selector" id="analysis-examples" role="group" aria-label="Attention example"></div>
+ <div class="analysis-stage"><div class="analysis-labels" id="analysis-labels"><span>RGB input</span><span>INVAR</span><span>DINOv3</span><span>CAIP</span></div>
+ <figure class="analysis-film"><video id="analysis-video" muted loop playsinline preload="none" poster="assets/story/attention-robot.jpg" src="assets/story/attention-robot.mp4" aria-label="Input, INVAR, DINOv3, and CAIP attention on spray-bottle grasping"></video><img id="analysis-image" src="assets/story/correspondence.webp" alt="Simulation query patches matched to real-world patches using INVAR, DINOv3, and CAIP" hidden loading="lazy" width="2892" height="1202"><div class="film-transport" id="analysis-transport"><button type="button" id="analysis-play" aria-label="Play visualization">▷ Play</button><input type="range" id="analysis-time" min="0" max="100" step="0.1" value="0" aria-label="Visualization playback position"><span id="analysis-clock">0:00</span><button type="button" id="analysis-speed" aria-label="Change visualization playback speed">2×</button><button type="button" id="analysis-expand" aria-label="Expand visualization to fullscreen">⤢</button></div><figcaption id="analysis-caption">Last-block attention on real robot footage.</figcaption></figure></div>
+ <p class="small">These visualizations show where the encoders respond; they do not measure what causes policy success. The real-robot and human videos were not used to adapt INVAR.</p>
+ </div>
+</section>
 <section id="method" class="section tinted">
  <div class="wrap">
-  <div class="section-heading"><span class="index">02 / SELF-DISTILLATION</span><h2>Self-distillation from <br>state-matched renders.</h2><p>A simulator can generate paired renders from the exact same underlying state. INVAR uses these pairs for asymmetric self-distillation: the student processes randomized views and learns to match an EMA teacher that receives only clean renders.</p></div>
+  <div class="section-heading"><span class="index">03 / SELF-DISTILLATION</span><h2>Self-distillation from <br>state-matched renders.</h2><p>A simulator can generate paired renders from the exact same underlying state. INVAR uses these pairs for asymmetric self-distillation: the student processes randomized views and learns to match an EMA teacher that receives only clean renders.</p></div>
   <div class="method-toolbar"><div class="steps" role="group" aria-label="Self-distillation explanation"><button type="button" data-step="0" aria-pressed="true"><span>1</span> Match the state</button><button type="button" data-step="1" aria-pressed="false"><span>2</span> Align the features</button><button type="button" data-step="2" aria-pressed="false"><span>3</span> Freeze and reuse</button></div><button type="button" class="tour-button" id="method-tour" aria-pressed="false">▷ Play tour</button></div>
   <div class="distill-stage" id="distill-stage" data-step="0">
     <div class="method-scene" data-scene="0" role="group" aria-label="The same simulator state yields similar features across appearance changes">
@@ -115,7 +125,7 @@
 </section>
 <section id="results" class="section tinted">
  <div class="wrap">
- <div class="section-heading"><span class="index">03 / ZERO-SHOT TRANSFER</span><h2>Zero-shot transfer to <br>unseen objects and tasks.</h2><p>Policies use a frozen INVAR encoder and train only on nominal simulation data. We evaluate zero-shot transfer to unseen objects across both embodiments; pouring and the parallel-gripper tasks also test unseen manipulation motions.</p></div>
+ <div class="section-heading"><span class="index">04 / ZERO-SHOT TRANSFER</span><h2>Zero-shot transfer to <br>unseen objects and tasks.</h2><p>Policies use a frozen INVAR encoder and train only on nominal simulation data. We evaluate zero-shot transfer to unseen objects across both embodiments; pouring and the parallel-gripper tasks also test unseen manipulation motions.</p></div>
  <div class="switcher platform-switcher" role="group" aria-label="Robot embodiment"><button type="button" data-platform="dex" aria-pressed="true">Dexterous hand</button><button type="button" data-platform="bimanual" aria-pressed="false">Bimanual gripper</button></div>
  <div class="result-task-selector" id="result-tasks" role="group" aria-label="Dexterous-hand tasks"></div>
  <div id="grasp-selector" class="object-selector" role="group" aria-label="Unseen grasping object" hidden>
@@ -139,16 +149,7 @@
 </section>
 
 
-<section id="analysis" class="section tinted">
- <div class="wrap">
- <div class="section-heading"><span class="index">04 / INSIDE THE REPRESENTATION</span><h2>Visual invariance across <br>the sim-to-real gap.</h2><p>Attention maps, patch-level PCA, and sim-to-real patch correspondence show how INVAR suppresses task-irrelevant appearance variation while preserving manipulation-relevant structure.</p></div>
- <div class="switcher" role="group" aria-label="Representation analysis"><button type="button" data-analysis="attention" aria-pressed="true">Attention</button><button type="button" data-analysis="pca" aria-pressed="false">Feature PCA</button><button type="button" data-analysis="correspondence" aria-pressed="false">Sim-to-real matches</button></div>
- <div class="example-selector" id="analysis-examples" role="group" aria-label="Attention example"></div>
- <div class="analysis-stage"><div class="analysis-labels" id="analysis-labels"><span>RGB input</span><span>INVAR</span><span>DINOv3</span><span>CAIP</span></div>
- <figure class="analysis-film"><video id="analysis-video" muted loop playsinline preload="none" poster="assets/story/attention-robot.jpg" src="assets/story/attention-robot.mp4" aria-label="Input, INVAR, DINOv3, and CAIP attention on spray-bottle grasping"></video><img id="analysis-image" src="assets/story/correspondence.webp" alt="Simulation query patches matched to real-world patches using INVAR, DINOv3, and CAIP" hidden loading="lazy" width="2892" height="1202"><div class="film-transport" id="analysis-transport"><button type="button" id="analysis-play" aria-label="Play visualization">▷ Play</button><input type="range" id="analysis-time" min="0" max="100" step="0.1" value="0" aria-label="Visualization playback position"><span id="analysis-clock">0:00</span><button type="button" id="analysis-speed" aria-label="Change visualization playback speed">2×</button><button type="button" id="analysis-expand" aria-label="Expand visualization to fullscreen">⤢</button></div><figcaption id="analysis-caption">Last-block attention on real robot footage.</figcaption></figure></div>
- <p class="small">These visualizations show where the encoders respond; they do not measure what causes policy success. The real-robot and human videos were not used to adapt INVAR.</p>
- </div>
-</section>
+
 <section id="scaling" class="section wrap">
  <div class="section-heading"><span class="index">05 / SCALING AND ABLATIONS</span><h2>How pretraining data <br>affects real-world transfer.</h2><p>At a fixed pretraining budget, broader embodiment diversity improves real-world transfer. Increasing task and object diversity also helps, and real-world success scales with the number of pretraining pairs.</p></div>
  <div class="switcher" role="group" aria-label="Scaling ablation"><button type="button" data-scale="diversity" aria-pressed="true">Embodiment diversity</button><button type="button" data-scale="tasks" aria-pressed="false">Task diversity</button><button type="button" data-scale="size" aria-pressed="false">Dataset size</button></div>

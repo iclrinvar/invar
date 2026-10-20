@@ -263,3 +263,6 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 .normalization-sequence{width:78px}
 
 .dex-task-pair img.sharpa-still{height:240px;width:100%;object-fit:contain;aspect-ratio:auto}
+
+/* Keep the attention section below the opening viewport. */
+.title-film{min-height:calc(100vh - var(--nav-height,60px));min-height:calc(100dvh - var(--nav-height,60px));max-height:none}

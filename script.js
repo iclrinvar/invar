@@ -1,5 +1,9 @@
 'use strict';
 const $ = id => document.getElementById(id);
+const pageNav=document.querySelector('.nav');
+function sizeTitleViewport(){document.documentElement.style.setProperty('--nav-height',`${pageNav.getBoundingClientRect().height}px`);}
+sizeTitleViewport();
+new ResizeObserver(sizeTitleViewport).observe(pageNav);
 // Default to 2× playback; the title montage opts into 3×.
 function configureVideo(video){const rate=Number(video.dataset.playbackRate)||2;video.defaultPlaybackRate=rate;video.playbackRate=rate;video.addEventListener('loadedmetadata',()=>{video.playbackRate=rate;});}
 document.querySelectorAll('video').forEach(configureVideo);

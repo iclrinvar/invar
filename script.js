@@ -36,9 +36,9 @@ bindGroup('data-approach', value => {
   $('approach-explanation').innerHTML = ours ? '<strong>Randomize once, during encoder pretraining.</strong> Freeze INVAR and train each new policy on clean simulation images.' : '<strong>Clean simulation → randomized simulation → policy learning.</strong> Each new task needs its own randomized data. Each policy learns the task and how to handle changes in appearance.';
 });
 const steps = [
-  ['STATE-MATCHED RENDERING', 'Change the appearance, keep the state.', 'The head and wrist cameras see the same robot and objects in both renders. Only the lighting, materials, table texture, and background change. INVAR learns to give these views similar features.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
-  ['ASYMMETRIC SELF-DISTILLATION', 'Match the teacher’s features.', 'The student learns to match the teacher’s output on the clean image. Gradients update the student, and a moving average of its weights updates the teacher.', 'Student(randomized) ≈ Teacher(clean)<br><span>CLS loss · stop-gradient teacher · EMA update</span>'],
-  ['DOWNSTREAM POLICY LEARNING', 'Freeze INVAR and train a policy.', 'Keep the pretrained encoder fixed and train a policy on clean simulation images. Use both on the real robot, with no further training.', 'Clean image → frozen INVAR → policy<br><span>Simulation training → zero-shot deployment</span>']
+  ['STATE-MATCHED RENDERING', 'Change the appearance, keep the state.', 'The clean and randomized views share the exact same simulator state. They differ only in lighting, materials, table texture, and background. Matching their features teaches the encoder to discard these appearance changes.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
+  ['ASYMMETRIC SELF-DISTILLATION', 'Align randomized views with their clean counterparts.', 'A CLS self-distillation loss pulls the randomized student’s output toward the clean teacher’s output. Gradients update the student; an exponential moving average of the student weights updates the teacher.', 'Student(randomized) ≈ Teacher(clean)<br><span>CLS loss · stop-gradient teacher · EMA update</span>'],
+  ['DOWNSTREAM POLICY LEARNING', 'Freeze INVAR and train a policy.', 'After pretraining, freeze the encoder and remove visual domain randomization from policy training. Policies learn on nominal simulation and transfer zero-shot to the real world.', 'Clean image → frozen INVAR → policy<br><span>Simulation training → zero-shot deployment</span>']
 ];
 let methodStep = 0;
 let touring = false;
@@ -219,15 +219,27 @@ function updateHeroButton(){text('hero-motion',heroPlaying?'Pause videos Ⅱ':'P
 $('hero-motion').addEventListener('click',()=>{heroPlaying=!heroPlaying;updateHeroButton();document.querySelectorAll('[data-autoplay]').forEach(v=>{if(heroPlaying)v.play().catch(()=>{});else v.pause();});});
 updateHeroButton();
 let titlePlaying=!reducedMotion.matches;
-const titleVideo=$('title-video');
-function updateTitleButton(){$('title-motion').hidden=titleVideo.ended;text('title-motion',titlePlaying?'Pause video Ⅱ':titleVideo.ended?'Replay video ↻':'Play video ▷');$('title-motion').setAttribute('aria-pressed',String(titlePlaying));}
-$('title-motion').addEventListener('click',()=>{titlePlaying=!titlePlaying;updateTitleButton();if(titlePlaying)titleVideo.play().catch(()=>{});else titleVideo.pause();});
-$('title-replay').addEventListener('click',()=>{titleVideo.currentTime=0;titlePlaying=true;updateTitleButton();titleVideo.play().catch(()=>{});});
-titleVideo.addEventListener('ended',()=>{titlePlaying=false;updateTitleButton();});
-updateTitleButton();
-const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||(v.hasAttribute('data-title-autoplay')&&titlePlaying)||((v.hasAttribute('data-gallery-autoplay')||v.hasAttribute('data-rollout-autoplay'))&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
-document.querySelectorAll('video').forEach(v=>{if(reducedMotion.matches&&(v.hasAttribute('data-autoplay')||v.hasAttribute('data-title-autoplay'))){v.autoplay=false;v.pause();}mediaObserver.observe(v);});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());});
+let titleVisible=false;
+const titleGrid=$('title-grid');
+const titleVideos=[...titleGrid.querySelectorAll('video')];
+function updateTitlePlayback(){
+ const play=titlePlaying&&titleVisible&&!document.hidden;
+ titleGrid.style.animationPlayState=play?'running':'paused';
+ titleVideos.forEach(video=>{if(play)video.play().catch(()=>{});else video.pause();});
+ text('title-motion',titlePlaying?'Pause videos Ⅱ':'Play videos ▷');
+ $('title-motion').setAttribute('aria-pressed',String(titlePlaying));
+}
+$('title-motion').addEventListener('click',()=>{titlePlaying=!titlePlaying;updateTitlePlayback();});
+$('title-replay').addEventListener('click',()=>{
+ titleVideos.forEach(video=>video.currentTime=0);
+ titleGrid.classList.remove('title-intro');void titleGrid.offsetWidth;titleGrid.classList.add('title-intro');
+ titlePlaying=true;updateTitlePlayback();
+});
+new IntersectionObserver(entries=>{titleVisible=entries[0].isIntersecting;updateTitlePlayback();},{threshold:.15}).observe(document.querySelector('.title-media'));
+updateTitlePlayback();
+const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||((v.hasAttribute('data-gallery-autoplay')||v.hasAttribute('data-rollout-autoplay'))&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
+document.querySelectorAll('video:not([data-title-autoplay])').forEach(v=>{if(reducedMotion.matches&&(v.hasAttribute('data-autoplay')||v.hasAttribute('data-title-autoplay'))){v.autoplay=false;v.pause();}mediaObserver.observe(v);});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());updateTitlePlayback();});
 
 showStep(0);
 

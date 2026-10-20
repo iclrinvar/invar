@@ -32,11 +32,11 @@ Additional attention and patch-PCA sequences come from the supplied September me
 
 The visual design takes inspiration from EigenDEXplore's light opening, dark studio sections, media stages, and translucent segmented controls.
 
-The title uses a muted H.264 montage assembled from the full task rollouts. Pouring opens full-frame, then a smooth zoom reveals five grasping objects, mug flipping, and bimanual bottle manipulation in two scenes. It stays on the grid until all clips finish, holding each final frame instead of looping individual clips. The title plays once at 3× and holds on the completed grid; replay and pause controls are provided, and reduced-motion preferences disable autoplay.
+The title uses nine individually looping H.264 task clips, each resized to 640×360 and played at 3×. It opens on pouring and zooms out once to the full grid. Each tile restarts independently when its clip ends, so the grid keeps moving without replaying the intro. Shared pause and replay controls apply to all tiles; reduced-motion preferences disable automatic playback and the zoom.
 
-Task and representation videos default to 2× playback speed, including newly selected examples. The title montage uses 3× playback and lasts about 14 seconds.
+Task and representation videos default to 2× playback speed, including newly selected examples. The title grid uses 3× playback and loops continuously.
 
-The method pairs eight synchronized randomized head/left-wrist/right-wrist renders with the same clean simulator state. The feature-alignment diagram separates projection, teacher centering, softmax, and the detached action probe. Across-task pretraining data is grouped into bimanual tasks and dexterous object grasping. The Sharpa motion illustration is a cropped excerpt (84–96 seconds) of [EigenDEXplore’s published overview video](https://eigendexplore.github.io/videos/overview.mp4), credited beside the player.
+The method pairs eight synchronized randomized head/left-wrist/right-wrist renders with the same clean simulator state. The feature-alignment diagram separates projection, teacher centering, softmax, and the detached action probe. Across-task pretraining data is grouped into bimanual tasks and dexterous object grasping. The Sharpa hand is a static reference image from [EigenDEXplore’s hand gallery](https://eigendexplore.github.io/assets/s5/hands/sharpa.webp).
 
 Results are organized by embodiment and task, followed by convergence and robustness within the same Results section.
 

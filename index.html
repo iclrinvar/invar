@@ -7,8 +7,8 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261103-4">
-  <script src="script.js?v=20261103-4" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261103-5">
+  <script src="script.js?v=20261103-5" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -102,7 +102,7 @@
       <div class="method-panel-heading"><h3><span>1</span> Match the state</h3></div>
       <p class="method-panel-copy">The same state, with two appearances. The student learns to ignore changes in appearance and match the teacher’s features.</p>
       <div class="state-match-canvas">
-        <svg class="state-connectors" aria-hidden="true"><defs><marker id="state-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6" fill="#cdbb83"/></marker></defs><path id="state-random-path" marker-end="url(#state-arrow)"/><path id="state-clean-path" marker-end="url(#state-arrow)"/></svg>
+        <svg class="state-connectors" aria-hidden="true"><defs><marker id="state-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6" fill="#cdbb83"/></marker></defs><path id="state-random-path" marker-end="url(#state-arrow)"/><path id="state-clean-path" marker-end="url(#state-arrow)"/><path id="state-ema-path" marker-end="url(#state-arrow)"/></svg><span class="state-ema-label" id="state-ema-label">EMA update</span>
         <div class="shared-state"><span>SIMULATOR</span><strong>Same state <i>s</i></strong></div>
         <div class="state-branches">
           <div class="state-branch randomized">

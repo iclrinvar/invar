@@ -197,6 +197,18 @@ function positionStateConnectors(){
   const bend=sy+Math.max(10,(ty-sy)/2);
   $(id).setAttribute('d',`M ${sx} ${sy} V ${bend} H ${tx} V ${ty}`);
  }
+ const student=relative(canvas.querySelector('.student')),teacher=relative(canvas.querySelector('.teacher'));
+ const label=$('state-ema-label');
+ const gap=teacher.x-student.x-student.w;
+ if(gap>=110){
+  const start=student.x+student.w+10,end=teacher.x-12,y=student.y+student.h/2;
+  $('state-ema-path').setAttribute('d',`M ${start} ${y} H ${end}`);
+  label.style.left=`${(start+end)/2}px`;label.style.top=`${y-10}px`;
+ }else{
+  const start=student.x+student.w*.78,end=teacher.x+teacher.w*.22,y=Math.min(student.y,teacher.y)-32;
+  $('state-ema-path').setAttribute('d',`M ${start} ${student.y-10} V ${y} H ${end} V ${teacher.y-10}`);
+  label.style.left=`${(start+end)/2}px`;label.style.top=`${y-8}px`;
+ }
 }
 new ResizeObserver(positionStateConnectors).observe(document.querySelector('.state-match-canvas'));
 

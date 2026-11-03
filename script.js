@@ -26,87 +26,15 @@ function bindGroup(attribute, callback) {
     callback(button.getAttribute(attribute));
   }));
 }
-const steps = [
-  ['STATE-MATCHED RENDERING', 'Change the appearance, keep the state.', 'The clean and randomized views share the exact same simulator state. They differ only in lighting, materials, table texture, and background. Matching their features teaches the encoder to discard these appearance changes.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
-  ['ASYMMETRIC SELF-DISTILLATION', 'Align randomized views with their clean counterparts.', 'A CLS self-distillation loss pulls the randomized student’s output toward the clean teacher’s output. Gradients update the student; an exponential moving average of the student weights updates the teacher.', 'Student(randomized) ≈ Teacher(clean)<br><span>CLS loss · stop-gradient teacher · EMA update</span>'],
-  ['DOWNSTREAM POLICY LEARNING', 'Freeze INVAR and train a policy.', 'After pretraining, freeze the encoder and remove visual domain randomization from policy training. Policies learn on nominal simulation and transfer zero-shot to the real world.', 'Clean image → frozen INVAR → policy<br><span>Simulation training → zero-shot deployment</span>']
-];
-let methodStep = 0;
-let touring = false;
-let methodVisible = false;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-function showStep(value) {
-  methodStep = Number(value);
-  const [kicker,title,copy] = steps[methodStep];
-  text('step-kicker',kicker); text('step-title',title); text('step-copy',copy);
-  $('distill-stage').dataset.step = methodStep;
-  requestAnimationFrame(()=>{positionEmaConnector();positionStateConnectors();});
-  document.querySelectorAll('[data-step]').forEach(button => {if(button.tagName === 'BUTTON')button.setAttribute('aria-pressed',String(Number(button.dataset.step)===methodStep));});
-  document.querySelectorAll('[data-scene]').forEach(scene => {scene.hidden=Number(scene.dataset.scene)!==methodStep;if(scene.hidden)scene.querySelectorAll('video').forEach(v=>v.pause());});
-}
-function positionEmaConnector(){
- const scene=document.querySelector('[data-scene="1"]');
- if(scene.hidden)return;
- const parent=scene.querySelector('.alignment-canvas').getBoundingClientRect(),student=scene.querySelector('.student').getBoundingClientRect(),teacher=scene.querySelector('.teacher').getBoundingClientRect();
- const x=student.left+student.width/2-parent.left,y1=student.bottom-parent.top,y2=teacher.top-parent.top;
- const line=$('ema-line');Object.entries({x1:x,x2:x,y1:y1+1,y2:y2-4}).forEach(([key,value])=>line.setAttribute(key,value));
- const label=$('ema-label');label.setAttribute('x',x-12);label.setAttribute('y',(y1+y2)/2-5);label.querySelectorAll('tspan').forEach(span=>span.setAttribute('x',x-12));
- const target=$('probe-target').getBoundingClientRect(),probeY=target.top+target.height/2-parent.top;
- $('probe-path').setAttribute('d',`M ${x} ${student.top-parent.top-2} V ${probeY} H ${target.left-parent.left-7}`);
-}
-new ResizeObserver(positionEmaConnector).observe(document.querySelector('.alignment-canvas'));
-function updateTour(){text('method-tour', touring ? 'Ⅱ Pause tour' : '▷ Play tour');$('method-tour').setAttribute('aria-pressed',String(touring));}
-bindGroup('data-step', value => {touring=false;updateTour();showStep(value);});
-$('method-tour').addEventListener('click',()=>{touring=!touring;updateTour();if(touring)showStep((methodStep+1)%3);});
-new IntersectionObserver(entries=>{methodVisible=entries[0].isIntersecting;},{threshold:.15}).observe($('distill-stage'));
-setInterval(()=>{if(touring&&methodVisible&&!document.hidden)showStep((methodStep+1)%3);},6500);
 let variation = 1;
 function selectVariation(value){
  variation=Number(value);
  for(const [cam,id] of [['top','student-image'],['left','student-left'],['right','student-right']]){
   $(id).src=asset(`chess-v${variation}-${cam}`);$(id).alt=`Appearance variant ${variation}, ${cam} camera, same simulated chess state`;
  }
- $('alignment-student-image').src=asset(`chess-v${variation}-top`);
- document.querySelectorAll('[data-variant]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.variant)===variation)));
 }
-bindGroup('data-variant',selectVariation);
 $('variation').addEventListener('click',()=>selectVariation(variation%8+1));
-const galleries = {
-  embodiments: [
-    ['data-dex','Dexterous hand','','Simulated dexterous hand grasping an object'],
-    ['data-gripper','Bimanual parallel gripper','','Simulated bimanual grippers manipulating dishes'],
-    ['data-humanoid','Humanoid loco-manipulation','','Humanoid simulation in a furnished scene']
-  ],
-  views: [
-    ['data-wrist','Wrist camera','','Simulated wrist-camera view of a cup'],
-    ['data-head','Head camera','','Simulated head-camera view of a cup and workspace']
-  ],
-  tasks: [
-    ['data-sweep','Sweep','Bimanual pretraining task.','Bimanual robots sweeping in simulation'],
-    ['clean-chess','Chess','Bimanual pretraining task.','Chess manipulation in simulation'],
-    ['data-dishrack','Dish rack','Bimanual pretraining task.','Dish-rack manipulation in simulation'],
-    ['data-spell','Spell','Bimanual pretraining task.','Bimanual robots manipulating colored blocks'],
-    ['data-pour','Pour','Bimanual pretraining task.','Bimanual pouring setup in simulation'],
-    ['data-objects','Grasp 20 objects','Dexterous-hand pretraining.','The household object collection for dexterous grasp pretraining']
-  ]
-};
-bindGroup('data-gallery', key => {
-  $('data-gallery').querySelectorAll('video').forEach(video=>{video.pause();mediaObserver.unobserve(video);});
-  $('data-gallery').className = `gallery ${key}`;
-  if(key==='tasks'){
-   $('data-gallery').replaceChildren($('pretraining-tasks-template').content.cloneNode(true));
-   $('data-gallery').querySelectorAll('video').forEach(video=>{configureVideo(video);if(reducedMotion.matches){video.autoplay=false;video.pause();}mediaObserver.observe(video);});
-   return;
-  }
-  $('data-gallery').replaceChildren(...galleries[key].map(([src,title,copy,alt]) => {
-    const figure = document.createElement('figure');
-    const img = document.createElement('img'); img.src = asset(src); img.alt = alt; img.loading = 'lazy';
-    const caption = document.createElement('figcaption');
-    const strong = document.createElement('strong'); strong.textContent = title;
-    const span = document.createElement('span'); span.textContent = copy;
-    caption.append(strong);if(copy)caption.append(span); figure.append(img,caption); return figure;
-  }));
-});
 const tasks = {
   pour: {video:'invar-pour',tag:'UNSEEN OBJECT AND TASK',title:'Pour wine into a bowl',description:'Neither these objects nor the pouring task appears in encoder pretraining.',caption:'Sharpa hand on a Tianji arm.',ours:58,baseline:25,name:'DINOv3 with DR',note:'24 real-world trials per method, compared with the strongest tested baseline.'},
   bottles: {video:'invar-bottles',tag:'UNSEEN OBJECTS AND TASK',title:'Put bottles into a bin',description:'The objects and the bottle-in-bin task are new to the pretrained encoder.',caption:'Parallel grippers on two YAM arms.',ours:83,baseline:46,name:'Frozen CAIP with DR',note:'24 real-world trials per method, compared with the strongest tested baseline.'},
@@ -145,13 +73,33 @@ function showPlatform(key){
  showTask(selectedTask[key]);
 }
 bindGroup('data-platform',showPlatform);showPlatform('dex');
-const robustness = {
-  watering:['Watering-can grasping trials under varied visual conditions','Watering-can grasps under different lighting and surface conditions. Each tile is one trial.'],
-  spray:['Spray-bottle grasping trials under varied visual conditions','Spray-bottle grasps with different lighting, surfaces, and backgrounds. Each tile is one trial.'],
-  mug:['Mug-flipping trials under varied visual conditions','Mug flipping under different lighting and surface conditions. Each tile is one trial.'],
-  bottles:['Bottle manipulation trials under varied visual conditions','Bottles into a bin under different lighting and surface conditions. Each tile is one trial.']
-};
-bindGroup('data-robust',key => {setVideo('robust-video',`robust-${key}`,robustness[key][0]);text('robust-caption',robustness[key][1]);});
+const robustVideo=$('robust-video');
+const robustViewport=document.querySelector('.robust-viewport');
+const robustTasks={watering:['Watering-can grasping',25,'16 / 9'],spray:['Spray-bottle grasping',25,'16 / 9'],mug:['Mug flipping',24,'33 / 25'],bottles:['Bottles into a bin',24,'33 / 25']};
+let robustPlaying=!reducedMotion.matches,robustRevealed=reducedMotion.matches;
+function updateRobustZoom(){
+ if(robustRevealed)return;
+ const t=robustVideo.currentTime;
+ const progress=Math.min(1,Math.max(0,(t-5)/3));
+ const eased=progress*progress*(3-2*progress);
+ robustViewport.style.setProperty("--reveal-progress",eased);
+ robustVideo.style.transform=`translate(${25*(1-eased)}%,${25*(1-eased)}%) scale(${2.5-1.5*eased})`;
+ if(progress===1)robustRevealed=true;
+}
+function resetRobustZoom(){robustRevealed=reducedMotion.matches;robustViewport.style.setProperty('--reveal-progress',robustRevealed?1:0);robustVideo.style.transform=robustRevealed?'none':'translate(25%,25%) scale(2.5)';}
+function updateRobustButton(){text('robust-motion',robustPlaying?'Pause videos Ⅱ':'Play videos ▷');$('robust-motion').setAttribute('aria-pressed',String(robustPlaying));}
+function showRobust(key){
+ const [label,count,ratio]=robustTasks[key];
+ robustViewport.style.aspectRatio=ratio;robustViewport.dataset.trials=count;
+ setVideo('robust-video',`robust-${key}-shuffled`,`${label}: four contrasting conditions, then all ${count} trials in shuffled order`);
+ text('robust-caption',`${label}: four contrasting conditions, then all ${count} trials in shuffled order.`);
+ resetRobustZoom();if(!robustPlaying)robustVideo.pause();
+}
+bindGroup('data-robust',showRobust);
+robustVideo.addEventListener('timeupdate',updateRobustZoom);
+$('robust-replay').addEventListener('click',()=>{robustVideo.currentTime=0;resetRobustZoom();robustPlaying=true;robustVideo.play().catch(()=>{});updateRobustButton();});
+$('robust-motion').addEventListener('click',()=>{robustPlaying=!robustPlaying;if(robustPlaying)robustVideo.play().catch(()=>{});else robustVideo.pause();updateRobustButton();});
+resetRobustZoom();updateRobustButton();
 const analysisSets={
  attention:[
   ['attention-robot','Spray bottle','Last-block CLS attention during a spray-bottle grasp. INVAR responds to the bottle and contact areas more than the background.'],
@@ -231,14 +179,14 @@ $('title-replay').addEventListener('click',()=>{
 });
 new IntersectionObserver(entries=>{titleVisible=entries[0].isIntersecting;updateTitlePlayback();},{threshold:.15}).observe(document.querySelector('.title-media'));
 updateTitlePlayback();
-const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if(((v.hasAttribute('data-autoplay')&&heroPlaying)||((v.hasAttribute('data-gallery-autoplay')||v.hasAttribute('data-rollout-autoplay'))&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
+const mediaObserver=new IntersectionObserver(entries=>{for(const entry of entries){const v=entry.target;if(!entry.isIntersecting)v.pause();else if((v!==robustVideo||robustPlaying)&&((v.hasAttribute('data-autoplay')&&heroPlaying)||((v.hasAttribute('data-gallery-autoplay')||v.hasAttribute('data-rollout-autoplay'))&&!reducedMotion.matches))&&!document.hidden)v.play().catch(()=>{});}},{threshold:.15});
 document.querySelectorAll('video:not([data-title-autoplay])').forEach(v=>{if(reducedMotion.matches&&(v.hasAttribute('data-autoplay')||v.hasAttribute('data-title-autoplay'))){v.autoplay=false;v.pause();}mediaObserver.observe(v);});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());updateTitlePlayback();});
 
-showStep(0);
+
 
 function positionStateConnectors(){
- const canvas=document.querySelector('.state-match-canvas');if(canvas.closest('[data-scene]').hidden)return;
+ const canvas=document.querySelector('.state-match-canvas');
  const box=canvas.getBoundingClientRect(),state=canvas.querySelector('.shared-state').getBoundingClientRect();
  const relative=el=>{const r=el.getBoundingClientRect();return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height};};
  const mobile=innerWidth<=700;
@@ -248,8 +196,20 @@ function positionStateConnectors(){
   const x=target.x-7,y=target.y+target.h/2,branch=mobile?10:sx+14;
   $(id).setAttribute('d',`M ${sx} ${sy} H ${branch} V ${y} H ${x}`);
  }
+ const student=relative(canvas.querySelector('.randomized .invariance-encoder')),probe=relative($('state-probe-target'));
+ $('state-probe-path').setAttribute('d',`M ${student.x+student.w/2} ${student.y-4} V ${probe.y+probe.h/2} H ${probe.x-6}`);
  const first=relative(canvas.querySelector('.randomized .invariance-features')),second=relative(canvas.querySelector('.clean .invariance-features'));
  const x=first.x+first.w/2;
  $('similarity-path').setAttribute('d',mobile?`M ${first.x+first.w+2} ${first.y+first.h/2} H ${box.width-2} V ${second.y+second.h/2} H ${second.x+second.w+2}`:`M ${x} ${first.y+first.h+5} V ${second.y-5}`);
 }
 new ResizeObserver(positionStateConnectors).observe(document.querySelector('.state-match-canvas'));
+
+// Left rails follow the visible section and link directly to each panel.
+for(const rail of document.querySelectorAll('.section-rail')){
+ const links=[...rail.querySelectorAll('a')];
+ const observer=new IntersectionObserver(entries=>{
+  const current=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top)[0];
+  if(current)links.forEach(link=>{if(link.hash===`#${current.target.id}`)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');});
+ },{rootMargin:'-15% 0px -55% 0px'});
+ links.forEach(link=>{const target=document.querySelector(link.hash);if(target)observer.observe(target);});
+}

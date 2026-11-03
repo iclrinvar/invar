@@ -24,7 +24,7 @@ The page preserves anonymous-review presentation. No author details, credentials
 
 ## Interactive presentation
 
-The opening uses spray-bottle and bimanual attention comparisons from the supplied September meeting deck. It has a shared motion control, and ambient playback respects reduced-motion preferences and pauses outside the viewport. The method has three animated schematic stages and an optional guided tour; the simulation-data gallery is part of that method section.
+The opening uses spray-bottle and bimanual attention comparisons from the supplied September meeting deck. It has a shared motion control, and ambient playback respects reduced-motion preferences and pauses outside the viewport. The method has vertically stacked state-matching and frozen-encoder reuse panels with a sticky left navigation rail; the pretraining-data panels follow the same layout.
 
 The five grasping examples match the five-object rollout set from slide 105 of the supplied talk. They are presented as task examples; the displayed INVAR/baseline comparison summarizes the entire benchmark rather than claiming a per-clip score. The separate hammer tool-use demo is omitted.
 
@@ -45,3 +45,7 @@ The state-matching schematic branches from one simulator state to clean/randomiz
 Human pouring has a dedicated analysis tab. Its note distinguishes INVAR’s simulation-only adaptation from CAIP’s egocentric human-video pretraining. Scaling reuses the original overview, data-composition, and nested object/task figures from the supplied Genesis export (slides 135–138), with the paper’s per-embodiment values retained below.
 
 The Idea section shows the prior approach above INVAR, with both pipelines visible. The hero highlights compare success with finetuned DINOv3 and convergence speed; the summary is two sentences.
+
+The appearance button cycles through eight synchronized chess camera sets. The student and EMA teacher sit in the state-matching diagram, with a detached student action-probe branch. Feature outputs are shown symbolically until matching PCA data is approved; the simulation-hammer PCA review remains outside the published repository. The abstract has been removed.
+
+Results begin with robustness. Each task montage retains every original trial and its outcome label, in a fixed shuffled order. Four visually varied trials occupy the central 2×2 region and open enlarged; playback then zooms out once to the complete 5×5 grid. The 24-trial bimanual grids use a labeled empty cell. The full grid stays visible on loops; replay restarts the zoom. Reduced-motion mode skips the zoom.

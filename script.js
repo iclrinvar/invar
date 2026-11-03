@@ -187,20 +187,16 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)document.qu
 
 function positionStateConnectors(){
  const canvas=document.querySelector('.state-match-canvas');
- const box=canvas.getBoundingClientRect(),state=canvas.querySelector('.shared-state').getBoundingClientRect();
+ const box=canvas.getBoundingClientRect();
  const relative=el=>{const r=el.getBoundingClientRect();return {x:r.left-box.left,y:r.top-box.top,w:r.width,h:r.height};};
- const mobile=innerWidth<=700;
- const sx=mobile?state.left-box.left+state.width*.25:state.right-box.left,sy=state.top-box.top+state.height*(mobile?1:.5);
+ const state=relative(canvas.querySelector('.shared-state'));
  for(const [row,id] of [['randomized','state-random-path'],['clean','state-clean-path']]){
-  const target=relative(canvas.querySelector(`.${row} .invariance-input>.node-label`));
-  const x=target.x-7,y=target.y+target.h/2,branch=mobile?10:sx+14;
-  $(id).setAttribute('d',`M ${sx} ${sy} H ${branch} V ${y} H ${x}`);
+  const target=relative(canvas.querySelector(`.${row} .appearance-control`));
+  const sx=state.x+state.w*(row==='randomized'?.3:.7),sy=state.y+state.h+10;
+  const tx=target.x+target.w/2,ty=target.y-12;
+  const bend=sy+Math.max(10,(ty-sy)/2);
+  $(id).setAttribute('d',`M ${sx} ${sy} V ${bend} H ${tx} V ${ty}`);
  }
- const student=relative(canvas.querySelector('.randomized .invariance-encoder')),probe=relative($('state-probe-target'));
- $('state-probe-path').setAttribute('d',`M ${student.x+student.w/2} ${student.y-4} V ${(student.y+probe.y+probe.h)/2} H ${probe.x+probe.w/2} V ${probe.y+probe.h+5}`);
- const first=relative(canvas.querySelector('.randomized .invariance-features')),second=relative(canvas.querySelector('.clean .invariance-features'));
- const x=first.x+first.w/2;
- $('similarity-path').setAttribute('d',mobile?`M ${first.x+first.w+2} ${first.y+first.h/2} H ${box.width-2} V ${second.y+second.h/2} H ${second.x+second.w+2}`:`M ${x} ${first.y+first.h+5} V ${second.y-5}`);
 }
 new ResizeObserver(positionStateConnectors).observe(document.querySelector('.state-match-canvas'));
 

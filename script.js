@@ -197,7 +197,7 @@ function positionStateConnectors(){
   $(id).setAttribute('d',`M ${sx} ${sy} H ${branch} V ${y} H ${x}`);
  }
  const student=relative(canvas.querySelector('.randomized .invariance-encoder')),probe=relative($('state-probe-target'));
- $('state-probe-path').setAttribute('d',`M ${student.x+student.w/2} ${student.y-4} V ${probe.y+probe.h/2} H ${probe.x-6}`);
+ $('state-probe-path').setAttribute('d',`M ${student.x+student.w/2} ${student.y-4} V ${(student.y+probe.y+probe.h)/2} H ${probe.x+probe.w/2} V ${probe.y+probe.h+5}`);
  const first=relative(canvas.querySelector('.randomized .invariance-features')),second=relative(canvas.querySelector('.clean .invariance-features'));
  const x=first.x+first.w/2;
  $('similarity-path').setAttribute('d',mobile?`M ${first.x+first.w+2} ${first.y+first.h/2} H ${box.width-2} V ${second.y+second.h/2} H ${second.x+second.w+2}`:`M ${x} ${first.y+first.h+5} V ${second.y-5}`);

@@ -7,7 +7,7 @@ new ResizeObserver(sizeTitleViewport).observe(pageNav);
 // Default to 2× playback; the title montage opts into 3×.
 function configureVideo(video){const rate=Number(video.dataset.playbackRate)||2;video.defaultPlaybackRate=rate;video.playbackRate=rate;video.addEventListener('loadedmetadata',()=>{video.playbackRate=rate;});}
 document.querySelectorAll('video').forEach(configureVideo);
-const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}${name==='invar-bottles'&&ext==='mp4'?'?v=20261020-2':''}`;
+const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}${name==='invar-bottles'&&ext==='mp4'?'?v=20261020-2':'?v=20261103-1'}`;
 function text(id, value) { $(id).textContent = value; }
 function setVideo(id, name, label, legacy = false) {
   const video = $(id);
@@ -26,19 +26,6 @@ function bindGroup(attribute, callback) {
     callback(button.getAttribute(attribute));
   }));
 }
-bindGroup('data-approach', value => {
-  const ours = value === 'invar';
-  $('approach-stage').dataset.mode = value;
-  document.querySelectorAll('.random-source,.random-edge').forEach(el => el.hidden = ours);
-  text('input-caption', ours ? 'Clean images for each new policy' : 'Start from the nominal scene');
-  text('encoder-state', ours ? 'FROZEN ENCODER' : 'FROZEN / FINETUNED');
-  $('idea-snowflake').hidden=!ours;
-  document.querySelector('.encoder').classList.toggle('frozen',ours);
-  text('encoder-name', ours ? 'INVAR' : 'Vision encoder');
-  text('output-caption', ours ? 'Zero-shot transfer' : 'Appearance changes can disrupt execution');
-  setVideo('approach-video', ours ? 'invar-bottles' : 'baseline-bottles', ours ? 'INVAR real-world bottle manipulation example' : 'Prior approach bottle manipulation failure example');
-  $('approach-explanation').innerHTML = ours ? '<strong>Randomize once, during encoder pretraining.</strong> Freeze INVAR and train each new policy on clean simulation images.' : '<strong>Clean simulation → randomized simulation → policy learning.</strong> Each new task needs its own randomized data. Each policy learns the task and how to handle changes in appearance.';
-});
 const steps = [
   ['STATE-MATCHED RENDERING', 'Change the appearance, keep the state.', 'The clean and randomized views share the exact same simulator state. They differ only in lighting, materials, table texture, and background. Matching their features teaches the encoder to discard these appearance changes.', 'Same simulator state <i>s</i><br><span>clean render ↔ randomized render</span>'],
   ['ASYMMETRIC SELF-DISTILLATION', 'Align randomized views with their clean counterparts.', 'A CLS self-distillation loss pulls the randomized student’s output toward the clean teacher’s output. Gradients update the student; an exponential moving average of the student weights updates the teacher.', 'Student(randomized) ≈ Teacher(clean)<br><span>CLS loss · stop-gradient teacher · EMA update</span>'],
@@ -186,7 +173,7 @@ const analysisSets={
 let analysisMode='attention';
 function showAnalysisExample(index){
  const [file,label,caption]=analysisSets[analysisMode][index];
- setVideo('analysis-video',file,`${label}: RGB, INVAR, DINOv3, CAIP ${analysisMode==='pca'?'patch PCA':'attention'}`);
+ setVideo('analysis-video',file,`${label}: RGB, DINOv3, CAIP, INVAR (ours) ${analysisMode==='pca'?'patch PCA':'attention'}`);
  text('analysis-caption',caption+(analysisMode==='pca'?' Colors show principal components of the features, not object labels.':''));
  document.querySelectorAll('[data-example]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.example)===index)));
 }

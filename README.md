@@ -24,11 +24,11 @@ The page preserves anonymous-review presentation. No author details, credentials
 
 ## Interactive presentation
 
-The opening uses the pouring and bimanual attention comparisons from the INVAR title slide. It has a shared motion control, and ambient playback respects reduced-motion preferences and pauses outside the viewport. The method has three animated schematic stages and an optional guided tour; the simulation-data gallery is part of that method section.
+The opening uses spray-bottle and bimanual attention comparisons from the supplied September meeting deck. It has a shared motion control, and ambient playback respects reduced-motion preferences and pauses outside the viewport. The method has three animated schematic stages and an optional guided tour; the simulation-data gallery is part of that method section.
 
 The five grasping examples match the five-object rollout set from slide 105 of the supplied talk. They are presented as task examples; the displayed INVAR/baseline comparison summarizes the entire benchmark rather than claiming a per-clip score. The separate hammer tool-use demo is omitted.
 
-Additional attention and patch-PCA sequences come from the supplied September meeting deck. Embedded diagnostic headers were removed and source columns reordered consistently to RGB, INVAR, DINOv3, CAIP. The opening comparisons contain RGB, INVAR, and DINOv3. PCA colors are visualized principal components, not class labels. Playback controls are below the analysis footage, with speed, seek, and fullscreen controls.
+Additional attention and patch-PCA sequences come from the supplied September meeting deck. Embedded diagnostic headers were removed and source columns reordered consistently to RGB, DINOv3, CAIP, INVAR (ours). The opening comparisons use spray-bottle grasping and bimanual manipulation with all three encoders. PCA colors are visualized principal components, not class labels. Playback controls are below the analysis footage, with speed, seek, and fullscreen controls.
 
 The visual design takes inspiration from EigenDEXplore's light opening, dark studio sections, media stages, and translucent segmented controls.
 
@@ -43,3 +43,5 @@ Results are organized by embodiment and task, followed by convergence and robust
 The state-matching schematic branches from one simulator state to clean/randomized three-camera renders and links their similar features. Rollout players automatically start muted at 2× when visible, while respecting reduced-motion preferences. The scaling selector includes object/task diversity from paper Table 3 alongside embodiment diversity and data scale from Table 2.
 
 Human pouring has a dedicated analysis tab. Its note distinguishes INVAR’s simulation-only adaptation from CAIP’s egocentric human-video pretraining. Scaling reuses the original overview, data-composition, and nested object/task figures from the supplied Genesis export (slides 135–138), with the paper’s per-embodiment values retained below.
+
+The Idea section shows the prior approach above INVAR, with both pipelines visible. The hero highlights compare success with finetuned DINOv3 and convergence speed; the summary is two sentences.

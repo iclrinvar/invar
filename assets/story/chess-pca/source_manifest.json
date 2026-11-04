@@ -1,0 +1,168 @@
+{
+  "repository": "https://github.com/iclrinvar/invar",
+  "commit": "07663859eedd2b95512991a794d25aa094f2b43e",
+  "images": [
+    {
+      "filename": "chess-clean-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-clean-top.webp",
+      "sha256": "7c339e1ba6a9ab0ac46b4e2fb4cc92f02937303c0df4cd507e65054099dcdb7b",
+      "bytes": 16170
+    },
+    {
+      "filename": "chess-clean-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-clean-left.webp",
+      "sha256": "95adedfa3c3601efd47c840aa6d00c018ccfccc91752679941d16fc5d3b0840e",
+      "bytes": 13770
+    },
+    {
+      "filename": "chess-clean-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-clean-right.webp",
+      "sha256": "6751b1373775ae8be25148f1ee45390871cd5f9340af9dba39bbab777b5ab7ed",
+      "bytes": 13140
+    },
+    {
+      "filename": "chess-v1-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v1-top.webp",
+      "sha256": "591dc8322070ee8664ddeb6d31590989cbb6f44f1db20c53f97bfd2e93d19712",
+      "bytes": 55576
+    },
+    {
+      "filename": "chess-v1-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v1-left.webp",
+      "sha256": "92fca2a244abe975fa4864a67026682880418994b4ab585f383e8b1aff80cdd2",
+      "bytes": 41246
+    },
+    {
+      "filename": "chess-v1-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v1-right.webp",
+      "sha256": "93d50febd7df8b5977a7ee67f2b4534a41c0e76baff87b33a4fc22ef9ecaebeb",
+      "bytes": 37278
+    },
+    {
+      "filename": "chess-v2-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v2-top.webp",
+      "sha256": "21bae0efa86e94ea6ff0a6cabbf26f27db645564f6e751bb3a850f8e44cc657d",
+      "bytes": 46636
+    },
+    {
+      "filename": "chess-v2-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v2-left.webp",
+      "sha256": "6b9ea2ffb9b3b336c5725d7dc6168e123a355448fa3038fc807a7e4100e543a7",
+      "bytes": 44224
+    },
+    {
+      "filename": "chess-v2-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v2-right.webp",
+      "sha256": "dad04135d91bd1d3d99a1d3a3581cb8031edbac24641ee543652d17ddc9500ea",
+      "bytes": 42082
+    },
+    {
+      "filename": "chess-v3-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v3-top.webp",
+      "sha256": "4f26b43553e0db2ffa5f48db908710fc74fc3ca85192ca3bd933182abb8d2eb2",
+      "bytes": 53118
+    },
+    {
+      "filename": "chess-v3-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v3-left.webp",
+      "sha256": "fd4912b252c37fd249e63b1dfddd56d2fa42bc517992695315add36e56241f8b",
+      "bytes": 24618
+    },
+    {
+      "filename": "chess-v3-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v3-right.webp",
+      "sha256": "69de2f846f90c3e6a8709d5034bc4de2d2646ef31672336d62595b8a215932e4",
+      "bytes": 17048
+    },
+    {
+      "filename": "chess-v4-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v4-top.webp",
+      "sha256": "36be09964f6dc21fd84dae30211e49182eef8fd7eb0722314116c9c2fd54cb06",
+      "bytes": 46576
+    },
+    {
+      "filename": "chess-v4-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v4-left.webp",
+      "sha256": "5330b2a484319c94d2d27cc734760eebb48e5103a6b11f52a043769c43bbb456",
+      "bytes": 34918
+    },
+    {
+      "filename": "chess-v4-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v4-right.webp",
+      "sha256": "5d182edee746b8f2e61d200b94a8bb736c1c9bca1c134ee36027953c248b066e",
+      "bytes": 29712
+    },
+    {
+      "filename": "chess-v5-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v5-top.webp",
+      "sha256": "ee67f03cc8de5364cc6d68c964cc9f631121d05126f98f11508bcdd9c1504f68",
+      "bytes": 32374
+    },
+    {
+      "filename": "chess-v5-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v5-left.webp",
+      "sha256": "a1149dc2e816ea5d7a355f07c47237a9b2c4f012ca796543b76ff1d3d9b1e4fd",
+      "bytes": 27338
+    },
+    {
+      "filename": "chess-v5-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v5-right.webp",
+      "sha256": "2c3e517aa2ed15be5cf3a147d1e95483736f1ba8a32a70c3d387ca9ef3a281a6",
+      "bytes": 24120
+    },
+    {
+      "filename": "chess-v6-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v6-top.webp",
+      "sha256": "8c239214fcf48e8a06a7258b8515611b02a8c30f8c11e6e5329e6bb5ba89f181",
+      "bytes": 44080
+    },
+    {
+      "filename": "chess-v6-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v6-left.webp",
+      "sha256": "02aa871c7166dd78801fa5b4547696a612db1348280f7630e3213d8242bc2bdd",
+      "bytes": 38912
+    },
+    {
+      "filename": "chess-v6-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v6-right.webp",
+      "sha256": "9797a4c7517d1d7280b3c199f9a6ada3c8ee0be447f7d4ac528a2f49cc8faf42",
+      "bytes": 34490
+    },
+    {
+      "filename": "chess-v7-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v7-top.webp",
+      "sha256": "b234a4c56eacf9f66f13bdc695e49f588166220b51850fc122f6a1a529390193",
+      "bytes": 94614
+    },
+    {
+      "filename": "chess-v7-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v7-left.webp",
+      "sha256": "a474111cf8078209d45d4fba6e5f9cb327d0f02c1f1d9428f1ff3f3a40e31ee1",
+      "bytes": 38444
+    },
+    {
+      "filename": "chess-v7-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v7-right.webp",
+      "sha256": "f6f13d47a03f3fab60a5cf2925daf83c60e808b93bf3ee84f45a4fe71bb9b975",
+      "bytes": 34054
+    },
+    {
+      "filename": "chess-v8-top.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v8-top.webp",
+      "sha256": "bbacf75aefe32666f060c2bc2c32b9af250c9340017d946770dd5fdddd773be1",
+      "bytes": 32482
+    },
+    {
+      "filename": "chess-v8-left.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v8-left.webp",
+      "sha256": "3316f2db77545a99d75f29ff7293553c1163e1ed8dd98587404ade2ab16c3f19",
+      "bytes": 35588
+    },
+    {
+      "filename": "chess-v8-right.webp",
+      "url": "https://raw.githubusercontent.com/iclrinvar/invar/07663859eedd2b95512991a794d25aa094f2b43e/assets/story/chess-v8-right.webp",
+      "sha256": "65e199e330d3990d31c485a46794214efcf0eb5593b8ccc9045c9a3e4e8527eb",
+      "bytes": 27304
+    }
+  ]
+}

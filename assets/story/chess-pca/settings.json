@@ -1,0 +1,351 @@
+{
+  "created_utc": "2026-11-04T00:28:52.081009+00:00",
+  "source_repository": "https://github.com/iclrinvar/invar",
+  "source_commit": "07663859eedd2b95512991a794d25aa094f2b43e",
+  "checkpoint": {
+    "tag": "uni_abcdexhum",
+    "training_run": "uni_dino_abc_dex_humanoid_heads",
+    "path": "/dev-efs/w2g/encoders/enc_unihuman/distilled_step20000.pth",
+    "sha256": "8c2e40e469cc6fbe07778afa8480fb75501fbaed12c5479fe7716903144f7dc1",
+    "step": 20000,
+    "state_dict": "backbone",
+    "load": "strict=True; zero missing/unexpected keys",
+    "identity_evidence": [
+      "watch2grasp/scripts/encoder_analysis/encoders.py",
+      "watch2grasp/scripts/encoder_analysis/paper_frames_restyle.py"
+    ]
+  },
+  "model": {
+    "architecture": "vit_small_plus_patch16_dinov3",
+    "feature_dim": 384,
+    "patch_size": 16,
+    "num_blocks": 12,
+    "layer": "final transformer block (blocks.11), then model.norm via forward_features",
+    "excluded_prefix_tokens": 5,
+    "excluded_prefix_types": "1 CLS + 4 register tokens",
+    "projection_head": false,
+    "eval_mode": true,
+    "inference_dtype": "float32; autocast disabled; TF32 disabled"
+  },
+  "preprocessing": {
+    "decode": "Pillow, RGB",
+    "source_size_wh": [
+      640,
+      480
+    ],
+    "input_size_wh": [
+      640,
+      480
+    ],
+    "resize": "none",
+    "crop": false,
+    "augmentation": false,
+    "pixel_scale": "uint8 / 255.0",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "patch_feature_normalization": "L2, independently per 384-D token"
+  },
+  "pca": {
+    "fit_count": 1,
+    "fit_scope": "all patches from ALL 27 images, all 3 cameras and all 9 appearances pooled",
+    "fit_samples": 32400,
+    "feature_dimension": 384,
+    "patch_grid_hw": [
+      30,
+      40
+    ],
+    "n_components": 3,
+    "algorithm": "float64 exact centered sample covariance, numpy.linalg.eigh; eigenvalues descending",
+    "whiten": false,
+    "standardize_feature_channels": false,
+    "mask": null,
+    "subsampling": false,
+    "component_sign": "largest-absolute loading positive, fixed once for the shared basis",
+    "explained_variance_ratio": [
+      0.18949506883417772,
+      0.1136878372567487,
+      0.08221385384672648
+    ],
+    "total_explained_variance_ratio": 0.3853967599376529,
+    "rgb": "PC1=R, PC2=G, PC3=B",
+    "normalization": "per component, pooled 2nd and 98th percentiles over all 27 maps; clip [0,1]",
+    "percentile_method": "linear",
+    "color_low": [
+      -0.6805612639916705,
+      -0.6625277669490701,
+      -0.41754283749756627
+    ],
+    "color_high": [
+      0.49284201518278115,
+      0.4085048446604308,
+      0.6020453195421126
+    ],
+    "quantization": "round(rgb * 255) to uint8",
+    "output_resize": "nearest-neighbor to original size",
+    "webp": "lossless, method=6, exact=True",
+    "seed": 0
+  },
+  "runtime": {
+    "python": "3.11.15",
+    "torch": "2.14.1+cu130",
+    "timm": "1.0.28",
+    "numpy": "2.2.6",
+    "pillow": "12.3.0",
+    "device": "cuda",
+    "gpu": "NVIDIA L40S"
+  },
+  "interpretation": "PCA colors are continuous projections, not semantic labels or proof of task relevance or invariance.",
+  "outputs": [
+    {
+      "input": "chess-clean-top.webp",
+      "output": "assets/story/chess-clean-top-pca.webp",
+      "sha256": "50249e972e021873f38e0f96927c6918f463939afcfe647d4f1c3c06a71d29a2",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-clean-left.webp",
+      "output": "assets/story/chess-clean-left-pca.webp",
+      "sha256": "6b7e5ab22b7d5548a068868262dfe7986b9b00db517f67dcaf2a1e225b73f7d5",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-clean-right.webp",
+      "output": "assets/story/chess-clean-right-pca.webp",
+      "sha256": "414a44a7f67152fbbb9b803d4e2e712c004a2aa8ff86ada361a3522215c02391",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v1-top.webp",
+      "output": "assets/story/chess-v1-top-pca.webp",
+      "sha256": "2378a4b5d1284b4a4cc50749f21c917cfa181095ec1ecad4c3881aad2501c201",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v1-left.webp",
+      "output": "assets/story/chess-v1-left-pca.webp",
+      "sha256": "d95d2bfc784028d53573af90eea9574018459df8508c0471d5f95665a9be1cbe",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v1-right.webp",
+      "output": "assets/story/chess-v1-right-pca.webp",
+      "sha256": "2f47acf54639405ecaf18bb78ccdf50b4e07c7a848e11958c2a408b6caec7ef4",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v2-top.webp",
+      "output": "assets/story/chess-v2-top-pca.webp",
+      "sha256": "0b224358bc03fbc5dd474e185def0416b159f7eb106ee45abf85523a36240318",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v2-left.webp",
+      "output": "assets/story/chess-v2-left-pca.webp",
+      "sha256": "05e4b12153cdf24b40ddc291eb07a36058b46b36dbfc5f61ad3759846afd8ab0",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v2-right.webp",
+      "output": "assets/story/chess-v2-right-pca.webp",
+      "sha256": "48ae72bdbe804cb581d9c09628169920c106f5eb875156a29fb2a0e4cf4bcd7f",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v3-top.webp",
+      "output": "assets/story/chess-v3-top-pca.webp",
+      "sha256": "d4831af25ba381ac3cb32ccb3a661b3f9dff41c7c5631b3fbd259efb73fcb169",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v3-left.webp",
+      "output": "assets/story/chess-v3-left-pca.webp",
+      "sha256": "3f4ca2011b39705ecca69576fec0c8c15e77344f124e166f471ea9cbea652480",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v3-right.webp",
+      "output": "assets/story/chess-v3-right-pca.webp",
+      "sha256": "8ee80709e22d8addb65ad449c1cc465226bd6605b8a31cd5247ec95b05dbbcfd",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v4-top.webp",
+      "output": "assets/story/chess-v4-top-pca.webp",
+      "sha256": "48eed747f19c98f3826a47041a723b190e0378e37c3eba9e87d5198d1b5cbbd2",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v4-left.webp",
+      "output": "assets/story/chess-v4-left-pca.webp",
+      "sha256": "1d5eba39f872fffb95e9a6ac9124e4b3f5bd686d2e0b2e5ef4f39b02dc325223",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v4-right.webp",
+      "output": "assets/story/chess-v4-right-pca.webp",
+      "sha256": "b54b8d9aca24a631707f09df6ddd8187b4819f77836022551e5a0b7f54224bbe",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v5-top.webp",
+      "output": "assets/story/chess-v5-top-pca.webp",
+      "sha256": "27daaa222c3c886ec1535d94d26782d72c7792d46751cb3fa30add7e52317c9a",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v5-left.webp",
+      "output": "assets/story/chess-v5-left-pca.webp",
+      "sha256": "fc1be020a598d0e87678e14e408fa8841bef83d699681e51aafb8882ad86d25c",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v5-right.webp",
+      "output": "assets/story/chess-v5-right-pca.webp",
+      "sha256": "713f6087a7c62fac9e942919ceb1ef81029ad2d288627054b7ffd39cd84fc879",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v6-top.webp",
+      "output": "assets/story/chess-v6-top-pca.webp",
+      "sha256": "1f850b4e1e74514cfb09aab80bd574d68225416750cbd5265000e2567841b9b8",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v6-left.webp",
+      "output": "assets/story/chess-v6-left-pca.webp",
+      "sha256": "9a2c626da67cbad62bb6e7ffc67c4c8c4c42049f2d0812fc422bb2586cfea0ce",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v6-right.webp",
+      "output": "assets/story/chess-v6-right-pca.webp",
+      "sha256": "61445f39ebbe937979eecab4091ac9f119c5b26eac88b77e025745e33f1792f3",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v7-top.webp",
+      "output": "assets/story/chess-v7-top-pca.webp",
+      "sha256": "7ce3f59a4b699079485fd70b5091586e5187f29c6178984477bf9a989674a6ed",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v7-left.webp",
+      "output": "assets/story/chess-v7-left-pca.webp",
+      "sha256": "96137d08d0fe00823815ae5c4b019d3a2d5b09a26279377dba0a644a2cd51d36",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v7-right.webp",
+      "output": "assets/story/chess-v7-right-pca.webp",
+      "sha256": "59ad5d59dddcc2023a525cf595c0b0d16d43e08ae63693c44d398ab116d46951",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v8-top.webp",
+      "output": "assets/story/chess-v8-top-pca.webp",
+      "sha256": "c971c81c2de6e1cfd12e56d2fa166b1bcc076c240ec108f87fadc5bb0bf6752a",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v8-left.webp",
+      "output": "assets/story/chess-v8-left-pca.webp",
+      "sha256": "0e8cc02e1537e5d016b8e4dc43a2b9406894d72bad0db086beae2c342cbb1c0a",
+      "size": [
+        640,
+        480
+      ]
+    },
+    {
+      "input": "chess-v8-right.webp",
+      "output": "assets/story/chess-v8-right-pca.webp",
+      "sha256": "a96ad0e617908de57ab0fac276e0d767f1d466ac0175bf9b20f19f87207563a7",
+      "size": [
+        640,
+        480
+      ]
+    }
+  ]
+}

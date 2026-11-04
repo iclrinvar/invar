@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "maps_verified": 27,
+  "source_hashes_verified": 27,
+  "output_hashes_verified": 27,
+  "output_pixels_verified": 8294400,
+  "one_shared_basis": true,
+  "pooled_color_percentiles_verified": true,
+  "pca_components_orthonormal": true,
+  "pca_score_variance_verified": true,
+  "all_cached_features_project_through_shared_basis": true,
+  "checkpoint_strict_load": "verified during extraction; 0 missing and 0 unexpected keys"
+}

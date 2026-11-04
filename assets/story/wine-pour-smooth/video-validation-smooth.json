@@ -1,0 +1,51 @@
+{
+  "status": "PASS",
+  "videos": [
+    {
+      "filename": "wine-pour-real-aligned.mp4",
+      "width": 1440,
+      "height": 810,
+      "fps": 60,
+      "frame_count": 690,
+      "duration_seconds": 11.5,
+      "all_frame_timestamps_verified": true,
+      "sha256": "1e0b98005173eb0258fa97109715a641b8f6eb06507bcd20e67e1c8f1584cf05"
+    },
+    {
+      "filename": "wine-pour-sim-smooth.mp4",
+      "width": 1440,
+      "height": 810,
+      "fps": 60,
+      "frame_count": 690,
+      "duration_seconds": 11.5,
+      "all_frame_timestamps_verified": true,
+      "sha256": "eedbbfa97ef3a6d1bf31d0a95d8560c7fdf24a4070abf33b6cf93a32d0c817cb"
+    },
+    {
+      "filename": "wine-pour-wipe-smooth-preview.mp4",
+      "width": 1440,
+      "height": 810,
+      "fps": 60,
+      "frame_count": 690,
+      "duration_seconds": 11.5,
+      "all_frame_timestamps_verified": true,
+      "sha256": "e08c1ba0b0c214bb281da5ee126e7a7c572ec226880b273e35f022238f7459b5"
+    }
+  ],
+  "real_source_native_fps": 60,
+  "real_video_resampling": "none",
+  "simulation_temporal_sampling": "interpolated original joint/object pose functions evaluated at every rendered time",
+  "synchronized_dimensions_fps_count_duration": true,
+  "all_three_presentation_timestamps_equal": true,
+  "wipe": {
+    "simulation_reveal": "left portion, divider sweeps right then left",
+    "start": "fully real",
+    "middle": "fully simulation",
+    "end": "fully real",
+    "divider_width_pixels": 3,
+    "crossfade": false,
+    "motion_reversed": false,
+    "formula": "round(width * (0.5 - 0.5*cos(2*pi*frame/(frame_count-1))))"
+  },
+  "limitations": "See README.txt and alignment-provenance.json; object poses, camera and inactive left-side pose are estimates, no liquid simulation."
+}

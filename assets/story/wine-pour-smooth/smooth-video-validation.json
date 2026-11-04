@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "videos": [
+    {
+      "file": "wine-pour-sim-smooth-240fps.mp4",
+      "width": 1440,
+      "height": 810,
+      "fps": 240,
+      "frames": 2760,
+      "duration_seconds": 11.5,
+      "every_frame_timestamp_verified": true,
+      "sha256": "e645e573efc9aed05d66c105524562cc9d85e84d3c1cdabe0a6ab60eb6f5f895"
+    },
+    {
+      "file": "wine-pour-sim-smooth-120fps.mp4",
+      "width": 1440,
+      "height": 810,
+      "fps": 120,
+      "frames": 1380,
+      "duration_seconds": 11.5,
+      "every_frame_timestamp_verified": true,
+      "sha256": "009afc13353fab220bf1ecaac92bb610ee7132a8bb18d0cd41eff1cc5f782e1e"
+    },
+    {
+      "file": "wine-pour-sim-smooth.mp4",
+      "width": 1440,
+      "height": 810,
+      "fps": 60,
+      "frames": 690,
+      "duration_seconds": 11.5,
+      "every_frame_timestamp_verified": true,
+      "sha256": "eedbbfa97ef3a6d1bf31d0a95d8560c7fdf24a4070abf33b6cf93a32d0c817cb"
+    }
+  ],
+  "motion_reconstruction": "PCHIP over eleven unique measured poses; repeated readings collapsed",
+  "timing_changed": false,
+  "camera_changed": false,
+  "additional_measured_data": false,
+  "smoothing_metrics": "motion-smoothing-validation.json",
+  "lower_fps_exports": "exactly select every second/fourth 240fps master frame at the matching timestamps"
+}

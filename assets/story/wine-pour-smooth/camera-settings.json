@@ -1,0 +1,168 @@
+{
+  "width": 1440,
+  "height": 810,
+  "fx": 723.2900021408063,
+  "fy": 723.2900021408063,
+  "cx": 720.0,
+  "cy": 405.0,
+  "eye": [
+    1.109641034312841,
+    -0.11208249471043674,
+    1.2742934991666006
+  ],
+  "world_to_camera_R": [
+    [
+      0.1662566063077277,
+      0.9860778484806715,
+      0.0030360492037073694
+    ],
+    [
+      0.4152339012957048,
+      -0.0672167926680704,
+      -0.9072280363823456
+    ],
+    [
+      -0.894393396707392,
+      0.1520933250315336,
+      -0.4206281878417876
+    ]
+  ],
+  "world_to_camera_t": [
+    -0.07783190511167024,
+    0.6877803874995099,
+    1.5455063784363225
+  ],
+  "orientation_wxyz": [
+    0.6430594037135265,
+    0.41182873436595874,
+    0.3465299404519598,
+    0.5447831653203845
+  ],
+  "camera_to_world_opengl": [
+    [
+      0.1662566063077277,
+      -0.4152339012957048,
+      0.894393396707392
+    ],
+    [
+      0.9860778484806715,
+      0.0672167926680704,
+      -0.1520933250315336
+    ],
+    [
+      0.0030360492037073694,
+      0.9072280363823456,
+      0.4206281878417876
+    ]
+  ],
+  "manual_landmark_links": [
+    "Base_R",
+    "Link2_R",
+    "Link3_R"
+  ],
+  "manual_landmark_pixels": [
+    [
+      643.0,
+      187.0
+    ],
+    [
+      548.0,
+      187.0
+    ],
+    [
+      324.0,
+      184.0
+    ],
+    [
+      234.0,
+      344.0
+    ],
+    [
+      303.0,
+      445.0
+    ],
+    [
+      371.0,
+      414.0
+    ],
+    [
+      478.0,
+      365.0
+    ],
+    [
+      548.0,
+      372.0
+    ]
+  ],
+  "projected_landmarks": [
+    [
+      652.3595936664505,
+      183.64208964574772
+    ],
+    [
+      531.3588026682094,
+      186.04252381880713
+    ],
+    [
+      326.8441706456845,
+      189.02649755783278
+    ],
+    [
+      242.51565365046042,
+      336.8116838910647
+    ],
+    [
+      300.6571765460836,
+      438.83028779081945
+    ],
+    [
+      371.845629176462,
+      435.01460875422526
+    ],
+    [
+      470.8283065326185,
+      362.5008234674236
+    ],
+    [
+      551.642526547826,
+      366.25936747299136
+    ]
+  ],
+  "reprojection_rmse_px": 8.381721060696082,
+  "calibration": "estimated from manually identified robot landmarks; not a measured camera calibration",
+  "trajectory_offset_seconds": 0.35,
+  "trajectory_offset_status": "initial estimate, not timestamp-calibrated",
+  "table": {
+    "size_m": [
+      1.0,
+      1.6,
+      0.05
+    ],
+    "center_xyz_m": [
+      0.7869343707538461,
+      -0.0560586263495558,
+      0.725
+    ],
+    "yaw_radians": -0.1670329937785921,
+    "tabletop_z_m": 0.75,
+    "placement": "estimated to align visible table back edge at image y=500"
+  },
+  "manual_landmark_labels": [
+    "Base_R",
+    "Link2_R",
+    "Link3_R",
+    "wrist_band_t0",
+    "wrist_band_t3",
+    "wrist_band_t6",
+    "wrist_band_t9",
+    "wrist_band_t11.483"
+  ],
+  "future_wipe_settings": {
+    "direction": "left-to-right reveal simulation, then right-to-left reveal real",
+    "cut_x_formula": "round(width * (0.5 - 0.5*cos(2*pi*frame_index/(frame_count-1))))",
+    "video_frame_order": "forward for both videos, identical frame index",
+    "crossfade": false,
+    "reverse_motion": false,
+    "website_playback_speed": "not baked into either file"
+  }
+}

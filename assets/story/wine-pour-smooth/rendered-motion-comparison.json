@@ -1,0 +1,32 @@
+{
+  "before": {
+    "filename": "wine-pour-sim-aligned-120fps.mp4",
+    "comparison_sampling_fps": 60,
+    "moving_arm_roi": [
+      120,
+      130,
+      690,
+      680
+    ],
+    "evaluated_steps": 581,
+    "near_frozen_step_fraction": 0.6660929432013769,
+    "median_fraction_of_roi_changing_more_than_12_levels": 0.0007751196172248804,
+    "min_fraction_of_roi_changing_more_than_12_levels": 0.0,
+    "note": "Image-motion diagnostic; excludes static background and intended initial/final holds."
+  },
+  "after": {
+    "filename": "wine-pour-sim-smooth-240fps.mp4",
+    "comparison_sampling_fps": 60,
+    "moving_arm_roi": [
+      120,
+      130,
+      690,
+      680
+    ],
+    "evaluated_steps": 581,
+    "near_frozen_step_fraction": 0.0,
+    "median_fraction_of_roi_changing_more_than_12_levels": 0.01205103668261563,
+    "min_fraction_of_roi_changing_more_than_12_levels": 0.004491228070175438,
+    "note": "Image-motion diagnostic; excludes static background and intended initial/final holds."
+  }
+}

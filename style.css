@@ -475,3 +475,17 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 @media(max-width:480px){.state-ema-label{font-size:10px}}
 
 #freeze-reuse .train-policy small{display:block;width:100%;text-align:center}
+
+/* Measured chess PCA maps follow the same camera order as the RGB renders. */
+.chess-pca-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding-top:18px;border-top:1px solid #ffffff12}
+.chess-pca-heading strong{font-size:14px;font-weight:500;color:#d8d8df}
+.chess-pca-heading>span{font-size:11px;color:#b7b4a7}
+.chess-pca-pair{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+#match-state .chess-pca-pair img{image-rendering:pixelated}
+.chess-pca-caption{font-size:12px;line-height:1.6;color:#b8b8c2;text-align:center;margin:18px 0 0}
+#match-state .chess-pca-details{border:0;border-top:1px solid #ffffff12;background:none;border-radius:0;margin:18px 0 0;padding:12px 0 0}
+#match-state .chess-pca-details summary{font-size:12px;color:#c8be9b;padding:0}
+#match-state .chess-pca-details p{font-size:12px;line-height:1.65;margin:12px 0 0;color:#b5b5c0}
+.chess-pca-details a{color:#dcc78f}
+@media(max-width:1100px){.chess-pca-pair{gap:24px}}
+@media(max-width:480px){.chess-pca-pair{gap:16px}.chess-pca-heading strong{font-size:12px}.chess-pca-caption{font-size:11px}}

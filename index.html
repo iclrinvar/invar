@@ -7,8 +7,8 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261103-5">
-  <script src="script.js?v=20261103-5" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261103-6">
+  <script src="script.js?v=20261103-6" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -124,9 +124,10 @@
         <div class="encoded-feature-panel">
           <h4>Encoded features</h4>
           <div class="feature-comparison"><span>z<sub>randomized</sub></span><div><span aria-hidden="true">⟷</span><strong>Similar features</strong></div><span>z<sub>clean</sub></span></div>
-          <div class="method-pca-heading"><strong>INVAR patch features, visualized with PCA</strong><span>Simulation hammer example</span></div>
-          <div class="method-pca-pair"><figure><div class="method-pca-crop"><video data-rollout-autoplay muted loop playsinline preload="metadata" src="assets/story/pca-sim-hammer.mp4?v=20261103-1" poster="assets/story/pca-sim-hammer.jpg?v=20261103-1" aria-label="RGB simulation hammer example"></video></div><figcaption>RGB observation</figcaption></figure><figure><div class="method-pca-crop method-pca-features"><video data-rollout-autoplay muted loop playsinline preload="metadata" src="assets/story/pca-sim-hammer.mp4?v=20261103-1" poster="assets/story/pca-sim-hammer.jpg?v=20261103-1" aria-label="INVAR PCA features for the simulation hammer example"></video></div><figcaption>INVAR PCA features</figcaption></figure></div>
-          <p class="pca-example-note">PCA shown for the hammer example, not the chess renders above.</p>
+          <div class="chess-pca-heading"><strong>INVAR patch features, visualized with PCA</strong><span>Same state · shared color scale</span></div>
+          <div class="chess-pca-pair"><div class="chess-pca-group" aria-label="Randomized chess features"><div class="camera-set"><figure><img id="student-pca-top" src="assets/story/chess-v1-top-pca.webp" alt="INVAR PCA: head camera, randomized appearance 1" width="640" height="480"><figcaption>Head camera</figcaption></figure><figure><img id="student-pca-left" src="assets/story/chess-v1-left-pca.webp" alt="INVAR PCA: left wrist, randomized appearance 1" width="640" height="480"><figcaption>Left wrist</figcaption></figure><figure><img id="student-pca-right" src="assets/story/chess-v1-right-pca.webp" alt="INVAR PCA: right wrist, randomized appearance 1" width="640" height="480"><figcaption>Right wrist</figcaption></figure></div></div><div class="chess-pca-group" aria-label="Clean chess features"><div class="camera-set"><figure><img src="assets/story/chess-clean-top-pca.webp" alt="INVAR PCA: head camera, clean appearance" width="640" height="480"><figcaption>Head camera</figcaption></figure><figure><img src="assets/story/chess-clean-left-pca.webp" alt="INVAR PCA: left wrist, clean appearance" width="640" height="480"><figcaption>Left wrist</figcaption></figure><figure><img src="assets/story/chess-clean-right-pca.webp" alt="INVAR PCA: right wrist, clean appearance" width="640" height="480"><figcaption>Right wrist</figcaption></figure></div></div></div>
+          <p class="chess-pca-caption">One shared PCA basis and color scale across all 27 clean and randomized camera views.</p>
+          <details class="chess-pca-details"><summary>PCA settings and all views</summary><p>INVAR ViT-S+/16 at 20,000 steps. Final-block patch features are normalized with the output LayerNorm, then L2-normalized. Three principal components are fitted jointly across all 32,400 patches; colors use pooled 2nd–98th percentile bounds. The three components retain 38.5% of feature variance. Colors are continuous projections, not object labels.</p><p><a href="assets/story/chess-pca/chess-pca-contact-sheet.png" target="_blank" rel="noopener">View all 27 RGB/PCA pairs ↗</a> · <a href="assets/story/chess-pca/settings.json" target="_blank" rel="noopener">Checkpoint and extraction settings ↗</a></p></details>
         </div>
       </div>
       <p class="method-panel-copy method-footer">The action probe reads detached student features to select a checkpoint; it does not update the encoder.</p>

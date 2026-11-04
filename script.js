@@ -32,6 +32,8 @@ function selectVariation(value){
  variation=Number(value);
  for(const [cam,id] of [['top','student-image'],['left','student-left'],['right','student-right']]){
   $(id).src=asset(`chess-v${variation}-${cam}`);$(id).alt=`Appearance variant ${variation}, ${cam} camera, same simulated chess state`;
+  $(`student-pca-${cam}`).src=asset(`chess-v${variation}-${cam}-pca`);
+  $(`student-pca-${cam}`).alt=`INVAR PCA: ${cam} camera, randomized appearance ${variation}`;
  }
 }
 $('variation').addEventListener('click',()=>selectVariation(variation%8+1));

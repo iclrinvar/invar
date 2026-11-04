@@ -5,7 +5,7 @@ function sizeTitleViewport(){document.documentElement.style.setProperty('--nav-h
 sizeTitleViewport();
 new ResizeObserver(sizeTitleViewport).observe(pageNav);
 // Default to 2× playback; the title montage opts into 3×.
-function configureVideo(video){const rate=Number(video.dataset.playbackRate)||2;video.defaultPlaybackRate=rate;video.playbackRate=rate;video.addEventListener('loadedmetadata',()=>{video.playbackRate=rate;});}
+function configureVideo(video){const applyRate=()=>{const rate=Number(video.dataset.playbackRate)||2;video.defaultPlaybackRate=rate;video.playbackRate=rate;};applyRate();video.addEventListener('loadedmetadata',applyRate);}
 document.querySelectorAll('video').forEach(configureVideo);
 const asset = (name, ext = 'webp') => `assets/story/${name}.${ext}${name==='invar-bottles'&&ext==='mp4'?'?v=20261020-2':'?v=20261103-1'}`;
 function text(id, value) { $(id).textContent = value; }
@@ -166,6 +166,26 @@ let titlePlaying=!reducedMotion.matches;
 let titleVisible=false;
 const titleGrid=$('title-grid');
 const titleVideos=[...titleGrid.querySelectorAll('video')];
+const titlePouring=$('title-video');
+function setTitlePouring(intro){
+ const source=intro?'assets/story/wine-pour-sim-real.mp4':'assets/story/title-tiles/invar-pour.mp4';
+ if(titlePouring.getAttribute('src')===source)return;
+ const resumeAt=intro?0:titlePouring.currentTime*2;
+ titlePouring.dataset.playbackRate=intro?'1':'3';
+ titlePouring.poster=intro?'assets/story/wine-pour-sim-real.jpg':'assets/story/title-tiles/invar-pour.jpg';
+ titlePouring.setAttribute('aria-label',intro?'Wine pouring with a sliding comparison between the real robot and simulation':'Real-world wine pouring');
+ titlePouring.src=source;
+ titlePouring.addEventListener('loadedmetadata',()=>{
+  titlePouring.currentTime=resumeAt%titlePouring.duration;
+  updateTitlePlayback();
+ },{once:true});
+ titlePouring.load();
+}
+titleGrid.addEventListener('animationend',event=>{
+ if(event.target===titleGrid&&event.animationName==='title-reveal')setTitlePouring(false);
+});
+if(reducedMotion.matches)setTitlePouring(false);
+
 function updateTitlePlayback(){
  const play=titlePlaying&&titleVisible&&!document.hidden;
  titleGrid.style.animationPlayState=play?'running':'paused';
@@ -175,6 +195,7 @@ function updateTitlePlayback(){
 }
 $('title-motion').addEventListener('click',()=>{titlePlaying=!titlePlaying;updateTitlePlayback();});
 $('title-replay').addEventListener('click',()=>{
+ setTitlePouring(!reducedMotion.matches);
  titleVideos.forEach(video=>video.currentTime=0);
  titleGrid.classList.remove('title-intro');void titleGrid.offsetWidth;titleGrid.classList.add('title-intro');
  titlePlaying=true;updateTitlePlayback();

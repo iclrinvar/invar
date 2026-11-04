@@ -7,12 +7,12 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261103-8">
-  <script src="script.js?v=20261103-6" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261103-9">
+  <script src="script.js?v=20261103-9" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<nav class="nav" aria-label="Page sections"><a class="wordmark" href="#top">INVAR<span>↗</span></a><div><a href="#idea">Idea</a><a href="#analysis">Analysis</a><a href="#method">Method</a><a href="#results">Results</a><a href="#scaling">Scaling</a></div></nav>
+<nav class="nav" aria-label="Page sections"><a class="wordmark" href="#top">INVAR<span>↗</span></a><div><a href="#idea">Idea</a><a href="#analysis">Analysis</a><a href="#method">Method</a><a href="#results">Results</a><a href="#scaling">Scaling</a><a href="#tradeoffs">Trade-offs</a></div></nav>
 <header id="top" class="hero wrap">
   <div class="title-film">
     <div class="title-media"><div id="title-grid" class="title-grid title-intro">
@@ -193,6 +193,23 @@
  <p class="small"><span id="scaling-source">Paper Table 2.</span> These ablations use 12 real-world trials per task: hammer and spray-bottle grasping, and bottles into a bin. They are separate from the main benchmark.</p>
  <details><summary>More ablation results</summary><div class="findings"><div><h3>Cross-embodiment diversity</h3><p>With one robot type, increasing the grasping set from 5 to 20 objects raises success from 54% to 63%. Increasing gripper tasks from 2 to 5 raises success from 50% to 58%. Adding data from other robot types gives a larger gain.</p></div><div><h3>The asymmetric objective</h3><p>With the same data, architecture, and training budget, giving randomized images to both networks lowers real-world success from 84% to 42%. Keeping the teacher’s view clean works better.</p></div></div></details>
  <div class="closing"><h3>Visual randomization as a one-time pretraining cost.</h3><p>Generate the randomized simulation corpus once, pretrain INVAR, and reuse the frozen encoder across downstream policies trained on nominal simulation.</p><p class="small">INVAR addresses differences in appearance, not geometry, dynamics, or actuation. We evaluate it with behavior-cloning policies.</p></div>
+</section>
+<section id="tradeoffs" class="section tinted">
+ <div class="wrap">
+  <div class="section-heading"><span class="index">06 / TRADE-OFFS</span><h2>What does INVAR give up?</h2><p>Adapting DINOv3 for manipulation lowers its scores on general vision benchmarks. ImageNet-1k linear top-1 accuracy falls from <strong>78.7% to 72.2%</strong>, a drop of <strong>6.5 percentage points</strong>.</p></div>
+  <div class="table-scroll vision-tradeoffs"><table>
+   <caption>General vision performance with frozen features</caption>
+   <thead><tr><th scope="col">Benchmark and metric</th><th scope="col">DINOv3</th><th scope="col">INVAR (ours)</th><th scope="col">Change</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">ImageNet-1k <span>Linear top-1 accuracy ↑</span></th><td>78.7%</td><td>72.2%</td><td>−6.5 pp</td></tr>
+    <tr><th scope="row">NYU-Depth <span>Depth RMSE ↓</span></th><td>0.449 m</td><td>0.513 m</td><td>+0.064 m</td></tr>
+    <tr><th scope="row">NYU-Depth <span>Depth accuracy δ₁ ↑</span></th><td>0.850</td><td>0.796</td><td>−0.054</td></tr>
+    <tr><th scope="row">DAVIS <span>Video label propagation, J&amp;F ↑</span></th><td>69.4</td><td>60.8</td><td>−8.6 points</td></tr>
+   </tbody>
+  </table></div>
+  <p class="small">Source: Appendix C.2.1, Table 9. Both encoders stay frozen during these probes; DINOv3 is the original pretrained encoder. ↑ Higher is better. ↓ Lower is better. pp = percentage points.</p>
+  <p class="tradeoff-note">The same evaluation shows stronger clean-to-randomized patch matching: <strong>0.763 → 0.898</strong>. INVAR trades some general vision performance for features that are more consistent across appearance changes.</p>
+ </div>
 </section>
 </main>
 <footer class="wrap"><a class="wordmark" href="#top">INVAR <span>↑</span></a><p>Invar is a nickel–iron alloy that holds its dimensions across a wide temperature range.<br>INVAR learns representations that remain consistent across rendering conditions.</p><p class="small">Anonymous project page · ICLR 2027 submission</p></footer>

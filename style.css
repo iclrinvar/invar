@@ -489,3 +489,18 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 .chess-pca-details a{color:#dcc78f}
 @media(max-width:1100px){.chess-pca-pair{gap:24px}}
 @media(max-width:480px){.chess-pca-pair{gap:16px}.chess-pca-heading strong{font-size:12px}.chess-pca-caption{font-size:11px}}
+
+/* Keep each feature label and its three maps inside one distinct bubble. */
+.chess-pca-heading{border:0;padding-top:0}
+.chess-pca-pair{grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);gap:12px;align-items:center}
+.chess-pca-group{min-width:0;border:1px solid #d8c18470;border-radius:18px;padding:18px 14px;background:#d8c18408}
+.chess-pca-group.pca-clean{border-color:#9bc3ba80;background:#9bc3ba08}
+.pca-bubble-heading{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.pca-bubble-heading strong{font:italic 29px Georgia,serif;color:#e4cf94}
+.pca-bubble-heading sub{font-size:14px}
+.pca-bubble-heading>span{font-size:11px;color:#c4b997}
+.pca-clean .pca-bubble-heading strong,.pca-clean .pca-bubble-heading>span{color:#b4d5cd}
+.pca-similarity{text-align:center;color:#d6c28b}
+.pca-similarity>span{display:block;font-size:31px;line-height:1.3}
+.pca-similarity small{display:block;font-size:10px;line-height:1.4}
+@media(max-width:600px){.chess-pca-pair{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);gap:6px}.chess-pca-group{padding:12px 8px;border-radius:12px}.pca-bubble-heading{gap:5px;margin-bottom:12px}.pca-bubble-heading strong{font-size:23px}.pca-bubble-heading sub{font-size:11px}.pca-bubble-heading>span{font-size:10px}.pca-similarity>span{font-size:25px}.pca-similarity small{font-size:8px}}

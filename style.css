@@ -515,7 +515,10 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 .vision-tradeoffs td{font-size:21px;white-space:nowrap;color:#eeeef3}
 .vision-tradeoffs td:last-child{color:#edb3a6;font-size:18px}
 .vision-tradeoffs tbody tr:last-child>*{border-bottom:0}
-.tradeoff-note{max-width:850px;color:var(--muted);font-size:18px;margin-top:28px}
-@media(max-width:640px){.vision-tradeoffs{padding:6px 12px 12px}.tradeoff-note{font-size:16px}}
+@media(max-width:640px){.vision-tradeoffs{padding:6px 12px 12px}}
 
 .vision-tradeoffs tbody th,.vision-tradeoffs caption{color:#eeeef3}
+
+.vision-tradeoffs .matching-gain>*{background:#254e493d}
+.vision-tradeoffs .matching-gain th,.vision-tradeoffs .matching-gain td:last-child,.vision-tradeoffs .matching-gain td strong{color:#9cd9c9}
+.vision-tradeoffs .matching-gain th span{color:#b2c9c4}

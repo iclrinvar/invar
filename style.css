@@ -506,14 +506,16 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 @media(max-width:600px){.chess-pca-pair{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);gap:6px}.chess-pca-group{padding:12px 8px;border-radius:12px}.pca-bubble-heading{gap:5px;margin-bottom:12px}.pca-bubble-heading strong{font-size:23px}.pca-bubble-heading sub{font-size:11px}.pca-bubble-heading>span{font-size:10px}.pca-similarity>span{font-size:25px}.pca-similarity small{font-size:8px}}
 
 /* General-vision trade-offs, from the paper's frozen-feature probes. */
-.vision-tradeoffs{margin:32px 0 20px;background:white;border:1px solid var(--line);border-radius:16px;padding:10px 24px 18px}
+.vision-tradeoffs{--muted:#aaaab8;--line:#ffffff20;margin:32px 0 20px;background:#18181b;color:#eeeeF3;border:1px solid var(--line);border-radius:16px;padding:10px 24px 18px}
 .vision-tradeoffs table{min-width:650px;font-variant-numeric:tabular-nums}
 .vision-tradeoffs caption{padding-top:12px;font-size:18px}
 .vision-tradeoffs thead th{background:transparent;color:var(--muted);font-size:15px}
 .vision-tradeoffs tbody th{background:transparent;font-size:18px;width:44%;font-weight:650}
 .vision-tradeoffs tbody th span{display:block;font-size:14px;font-weight:400;color:var(--muted)}
-.vision-tradeoffs td{font-size:21px;white-space:nowrap}
-.vision-tradeoffs td:last-child{color:#995249;font-size:18px}
+.vision-tradeoffs td{font-size:21px;white-space:nowrap;color:#eeeef3}
+.vision-tradeoffs td:last-child{color:#edb3a6;font-size:18px}
 .vision-tradeoffs tbody tr:last-child>*{border-bottom:0}
 .tradeoff-note{max-width:850px;color:var(--muted);font-size:18px;margin-top:28px}
 @media(max-width:640px){.vision-tradeoffs{padding:6px 12px 12px}.tradeoff-note{font-size:16px}}
+
+.vision-tradeoffs tbody th,.vision-tradeoffs caption{color:#eeeef3}

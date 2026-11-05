@@ -7,7 +7,7 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261104-1">
+  <link rel="stylesheet" href="style.css?v=20261104-3">
   <script src="script.js?v=20261103-9" defer></script>
 </head>
 <body>
@@ -45,7 +45,7 @@
       <div><strong><em>1.5×</em> faster convergence</strong><small>for policy training</small></div>
     </div>
   </div>
-  <div class="tldr"><strong>TL;DR</strong><p>INVAR learns a visual representation from diverse simulation randomizations, then freezes it for reuse across tasks. Policies trained on clean simulation images transfer zero-shot to real robots.</p></div>
+  <div class="tldr"><strong>TL;DR</strong><p>INVAR learns a visual representation from diverse simulation randomizations, then freezes it for reuse across tasks. <b>Policies trained on clean simulation images transfer zero-shot to real robots.</b></p></div>
   </div>
 </header>
 <main id="main">
@@ -167,7 +167,7 @@
  </div>
  <div class="result-layout">
   <figure class="result-film"><video data-rollout-autoplay id="result-video" controls muted loop playsinline preload="none" poster="assets/story/invar-pour.jpg" src="assets/story/invar-pour.mp4" aria-label="INVAR pours wine into a bowl"></video><figcaption id="result-video-caption">Sharpa hand on a Tianji arm.</figcaption></figure>
-  <div class="result-copy" aria-live="polite"><span class="overline" id="result-tag">UNSEEN OBJECT AND TASK</span><h3 id="result-title">Pour wine into a bowl</h3><p id="result-description">Neither these objects nor the pouring task appears in encoder pretraining.</p><div id="result-scores"><span class="chart-label">Real-world success rate</span><div class="score"><div><b>INVAR</b><strong id="ours-score">58%</strong></div><div class="track"><span id="ours-bar" style="width:58%"></span></div></div><div class="score baseline"><div><span id="baseline-name">DINOv3 with DR</span><strong id="baseline-score">25%</strong></div><div class="track"><span id="baseline-bar" style="width:25%"></span></div></div><p class="small" id="sample-note">24 real-world rollouts per method. Strongest evaluated baseline for this task.</p></div></div>
+  <div class="result-copy" aria-live="polite"><span class="overline" id="result-tag">UNSEEN OBJECT AND TASK</span><h3 id="result-title">Pour wine into a bowl</h3><p id="result-description">Neither these objects nor the pouring task appears in encoder pretraining.</p><div id="result-scores"><span class="chart-label">Real-world success rate</span><div class="score"><div class="score-heading"><b>INVAR</b><strong id="ours-score">58%</strong></div><div class="track"><span id="ours-bar" style="width:58%"></span></div></div><div class="score baseline"><small class="baseline-context">Best tested baseline for this task</small><div class="score-heading"><span id="baseline-name">DINOv3 with DR</span><strong id="baseline-score">25%</strong></div><div class="track"><span id="baseline-bar" style="width:25%"></span></div></div><p class="small" id="sample-note">24 real-world rollouts per method. Strongest evaluated baseline for this task.</p></div></div>
  </div>
  <details><summary>Full results and evaluation setup</summary><figure><img src="assets/story/results.webp" alt="Success rates for all six encoder and policy-training settings across real, nominal simulation, and randomized simulation evaluations" loading="lazy" width="2814" height="714"><figcaption>Paper Fig. 4. We compare encoders, frozen versus fine-tuned features, and clean versus randomized policy-training images. INVAR uses a frozen encoder and clean images.</figcaption></figure><p>For grasping, we run 25 trials on each of five objects: 125 trials per method. Each other task has 24 real-world trials per method. Simulation tests use 50 episodes per checkpoint. All methods use the same behavior-cloning policy architecture.</p><div class="table-scroll"><table><caption>Real-world suite means reported in the paper</caption><thead><tr><th>Evaluation suite</th><th>INVAR</th><th>Strongest suite baseline</th></tr></thead><tbody><tr><td>Dexterous manipulation (five grasp objects + pouring)</td><td>0.61</td><td>0.30</td></tr><tr><td>Bimanual parallel gripper (bottles + mug)</td><td>0.65</td><td>0.32</td></tr></tbody></table></div><p class="small">The table reports suite averages; the charts above compare each task with its strongest tested baseline. For pouring, we compare with DINOv3 trained with DR.</p></details>
  <div id="convergence" class="results-convergence">
@@ -196,7 +196,7 @@
 </section>
 <section id="tradeoffs" class="section tinted">
  <div class="wrap">
-  <div class="section-heading"><span class="index">06 / TRADE-OFFS</span><h2>What does INVAR lose?</h2><p>INVAR trades some general vision performance for features that are more consistent across appearance changes. Adapting DINOv3 for manipulation lowers its scores on general vision benchmarks.</p></div>
+  <div class="section-heading"><span class="index">06 / TRADE-OFFS</span><h2>What does INVAR lose?</h2><p>INVAR trades some general vision performance for features that are more consistent across appearance changes. Adapting DINOv3 for manipulation lowers its scores on general vision benchmarks. We expect training on larger datasets to improve general vision performance.</p></div>
   <div class="table-scroll vision-tradeoffs"><table>
    <caption>General vision and appearance invariance with frozen features</caption>
    <thead><tr><th scope="col">Benchmark and metric</th><th scope="col">DINOv3</th><th scope="col">INVAR (ours)</th><th scope="col">Change</th></tr></thead>

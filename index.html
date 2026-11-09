@@ -7,7 +7,7 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261108-1">
+  <link rel="stylesheet" href="style.css?v=20261108-3">
   <script src="script.js?v=20261103-9" defer></script>
 </head>
 <body>
@@ -82,12 +82,15 @@
 <section id="analysis" class="section tinted">
  <div class="wrap">
  <div class="section-heading"><span class="index">02 / INSIDE THE REPRESENTATION</span><h2>Visual invariance across <br>the sim-to-real gap.</h2><p>Attention maps, patch-level PCA, and sim-to-real patch correspondence show how INVAR suppresses task-irrelevant appearance variation while preserving manipulation-relevant structure.</p></div>
- <div class="switcher" role="group" aria-label="Representation analysis"><button type="button" data-analysis="attention" aria-pressed="true">Attention on robot video</button><button type="button" data-analysis="human" aria-pressed="false">Attention on human video</button><button type="button" data-analysis="pca" aria-pressed="false">Feature PCA</button><button type="button" data-analysis="correspondence" aria-pressed="false">Sim-to-real matches</button></div>
+ <div class="analysis-layout">
+ <div class="analysis-nav" role="group" aria-label="Representation analysis"><button type="button" data-analysis="attention" aria-pressed="true">Attention on robot video</button><button type="button" data-analysis="human" aria-pressed="false">Attention on human video</button><button type="button" data-analysis="pca" aria-pressed="false">Feature PCA</button><button type="button" data-analysis="correspondence" aria-pressed="false">Sim-to-real matches</button></div>
+ <div class="analysis-content">
  <div class="example-selector" id="analysis-examples" role="group" aria-label="Attention example"></div>
  <p class="callout" id="human-attention-note" hidden><strong>No human video in INVAR’s simulation pretraining.</strong> On this human pouring sequence, INVAR concentrates attention on manipulated objects and contact regions. DINOv3 also attends to background appearance, while CAIP remains diffuse—even though CAIP was pretrained on egocentric human video.</p>
  <div class="analysis-stage"><div class="analysis-labels" id="analysis-labels"><span>RGB input</span><span>DINOv3</span><span>CAIP</span><span>INVAR (ours)</span></div>
  <figure class="analysis-film"><video id="analysis-video" muted loop playsinline preload="none" poster="assets/story/attention-robot.jpg?v=20261103-4" src="assets/story/attention-robot.mp4?v=20261103-4" aria-label="RGB input, DINOv3, CAIP, and INVAR (ours) attention on spray-bottle grasping"></video><div id="analysis-image" class="correspondence-columns" hidden role="img" aria-label="Simulation query patches matched to real-world patches: DINOv3, CAIP, and INVAR (ours), from left to right."><div class="match-dino"><img src="assets/story/correspondence.webp" alt="" loading="lazy"></div><div class="match-caip"><img src="assets/story/correspondence.webp" alt="" loading="lazy"></div><div class="match-invar"><img src="assets/story/correspondence.webp" alt="" loading="lazy"></div></div><div class="film-transport" id="analysis-transport"><button type="button" id="analysis-play" aria-label="Play visualization">▷ Play</button><input type="range" id="analysis-time" min="0" max="100" step="0.1" value="0" aria-label="Visualization playback position"><span id="analysis-clock">0:00</span><button type="button" id="analysis-speed" aria-label="Change visualization playback speed">2×</button><button type="button" id="analysis-expand" aria-label="Expand visualization to fullscreen">⤢</button></div><figcaption id="analysis-caption">Last-block attention on real robot footage.</figcaption></figure></div>
  <p class="small">These visualizations show where the encoders respond; they do not measure what causes policy success. The real-robot and human videos were not used to adapt INVAR.</p>
+ </div></div>
  </div>
 </section>
 <section id="method" class="section tinted"><div class="wrap">

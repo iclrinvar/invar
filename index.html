@@ -7,7 +7,7 @@
   <meta name="description" content="INVAR trains a visual encoder in simulation and reuses it across robot tasks, with no real-world images for encoder or policy training.">
   <meta name="theme-color" content="#151517">
   <title>INVAR · Randomization-Invariant Visual Representations for Zero-Shot Sim-to-Real</title>
-  <link rel="stylesheet" href="style.css?v=20261104-3">
+  <link rel="stylesheet" href="style.css?v=20261108-1">
   <script src="script.js?v=20261103-9" defer></script>
 </head>
 <body>
@@ -39,8 +39,8 @@
     <div class="hero-stage-head"><span class="live-dot"></span> Encoder attention maps on real-world rollouts <button type="button" id="hero-motion" aria-pressed="true">Pause videos <span aria-hidden="true">Ⅱ</span></button></div>
     <div class="hero-column-labels"><span>RGB observation</span><span>DINOv3</span><span>CAIP</span><span class="ours-label">INVAR (ours)</span></div>
     <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/attention-robot.jpg?v=20261103-4" src="assets/story/attention-robot.mp4?v=20261103-4" aria-label="Spray-bottle grasping: RGB observation, DINOv3, CAIP, and INVAR (ours) attention"></video><figcaption><span>01</span> Dexterous spray-bottle grasping <small>Attention on the bottle and hand.</small></figcaption></figure>
-    <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/attn-bottles.jpg?v=20261103-4" src="assets/story/attn-bottles.mp4?v=20261103-4" aria-label="Bimanual manipulation: RGB observation, DINOv3, CAIP, and INVAR (ours) attention"></video><figcaption><span>02</span> Bimanual manipulation</figcaption></figure>
-    <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/attention-transport.jpg" src="assets/story/attention-transport.mp4" aria-label="Object transport: RGB observation, DINOv3, CAIP, and INVAR (ours) attention"></video><figcaption><span>03</span> Object transport</figcaption></figure>
+    <figure><video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/attn-bottles.jpg?v=20261103-4" src="assets/story/attn-bottles.mp4?v=20261103-4" aria-label="Bimanual manipulation: RGB observation, DINOv3, CAIP, and INVAR (ours) attention"></video>
+    <video data-autoplay autoplay muted loop playsinline preload="metadata" poster="assets/story/attention-transport.jpg" src="assets/story/attention-transport.mp4" aria-label="Object transport: RGB observation, DINOv3, CAIP, and INVAR (ours) attention"></video><figcaption><span>02</span> Bimanual manipulation</figcaption></figure>
     <div class="hero-highlights">
       <div><strong><em>2×</em> real-world success rate</strong><small>vs. finetuned DINOv3</small></div>
       <div><strong><em>1.5×</em> faster convergence</strong><small>for policy training</small></div>

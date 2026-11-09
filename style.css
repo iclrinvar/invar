@@ -525,3 +525,6 @@ body{background:linear-gradient(180deg,#484746 900px,#242426 2100px,#111113 4500
 
 .baseline-context { display: block; margin-bottom: 4px; color: #a9a9b0; font-size: 12px; line-height: 1.5; }
 .score-heading strong { flex-shrink: 0; margin-left: auto; text-align: right; }
+
+/* The two bimanual comparisons share one caption. */
+.hero-attention figure > video + video{margin-top:12px}

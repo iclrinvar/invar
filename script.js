@@ -120,31 +120,38 @@ const analysisSets={
   ['pca-sim-hammer','Simulation','Patch-feature PCA during simulated hammer grasping, before any change to real-world appearance.']
  ]
 };
-let analysisMode='attention';
-function showAnalysisExample(index){
- const [file,label,caption]=analysisSets[analysisMode][index];
- setVideo('analysis-video',file,`${label}: RGB, DINOv3, CAIP, INVAR (ours) ${analysisMode==='pca'?'patch PCA':'attention'}`);
- text('analysis-caption',caption+(analysisMode==='pca'?' Colors show principal components of the features, not object labels.':''));
- document.querySelectorAll('[data-example]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.example)===index)));
+// Each analysis section keeps its own examples and playback controls.
+for(const panel of document.querySelectorAll('[data-analysis-panel]')){
+ const key=panel.dataset.analysisPanel;
+ const video=panel.querySelector('video');
+ if(!video)continue;
+ const caption=panel.querySelector('[data-analysis-caption]');
+ const examples=panel.querySelector('[data-analysis-examples]');
+ const play=panel.querySelector('[data-analysis-play]');
+ const time=panel.querySelector('[data-analysis-time]');
+ const clock=panel.querySelector('[data-analysis-clock]');
+ const speed=panel.querySelector('[data-analysis-speed]');
+ function selectExample(index){
+  const [file,label,description]=analysisSets[key][index];
+  setVideo(video.id,file,`${label}: RGB, DINOv3, CAIP, INVAR (ours) ${key==='pca'?'patch PCA':'attention'}`);
+  caption.textContent=description+(key==='pca'?' Colors show principal components of the features, not object labels.':'');
+  if(examples)examples.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
+ }
+ if(examples)examples.replaceChildren(...analysisSets[key].map((entry,i)=>{
+  const button=document.createElement('button');button.type='button';button.textContent=entry[1];
+  button.setAttribute('aria-pressed',String(i===0));button.addEventListener('click',()=>selectExample(i));return button;
+ }));
+ function updatePlayback(){play.textContent=video.paused?'▷ Play':'Ⅱ Pause';play.setAttribute('aria-label',`${video.paused?'Play':'Pause'} ${panel.querySelector('h3').textContent.toLowerCase()}`);}
+ play.addEventListener('click',()=>{if(video.paused)video.play().catch(()=>{});else video.pause();});
+ video.addEventListener('play',updatePlayback);video.addEventListener('pause',updatePlayback);
+ video.addEventListener('ratechange',()=>{speed.textContent=`${video.playbackRate}×`;});
+ video.addEventListener('timeupdate',()=>{const t=video.currentTime;clock.textContent=`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;if(Number.isFinite(video.duration))time.value=100*t/video.duration;});
+ video.addEventListener('emptied',()=>{clock.textContent='0:00';time.value=0;updatePlayback();});
+ time.addEventListener('input',()=>{if(Number.isFinite(video.duration))video.currentTime=Number(time.value)/100*video.duration;});
+ speed.addEventListener('click',()=>{video.playbackRate=video.playbackRate===1?.5:video.playbackRate===.5?2:1;});
+ panel.querySelector('[data-analysis-expand]').addEventListener('click',()=>{const stage=panel.querySelector('.analysis-stage');if(stage.requestFullscreen)stage.requestFullscreen().catch(()=>{});else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();});
+ selectExample(0);
 }
-function showAnalysis(key){
- const matches=key==='correspondence';$('analysis-video').pause();$('analysis-video').hidden=matches;$('analysis-image').hidden=!matches;$('analysis-labels').hidden=matches;$('analysis-examples').hidden=matches||key==='human';$('human-attention-note').hidden=key!=='human';$('analysis-transport').hidden=matches;
- if(matches){text('analysis-caption','Simulation queries (top) and nearest real-image matches (bottom), using cosine similarity. INVAR recovers the bowl, bottle, fingertip, and forearm in this example. DINOv3 confuses robot parts, while CAIP maps several queries to the background.');return;}
- analysisMode=key;$('analysis-examples').setAttribute('aria-label',`${key==='pca'?'Feature PCA':'Attention'} example`);
- $('analysis-examples').replaceChildren(...analysisSets[key].map((entry,i)=>{const b=document.createElement('button');b.type='button';b.dataset.example=i;b.textContent=entry[1];b.setAttribute('aria-pressed',String(i===0));b.addEventListener('click',()=>showAnalysisExample(i));return b;}));
- showAnalysisExample(0);
-}
-bindGroup('data-analysis',showAnalysis);showAnalysis('attention');
-const analysisVideo=$('analysis-video');
-function updateAnalysisPlayback(){text('analysis-play',analysisVideo.paused?'▷ Play':'Ⅱ Pause');$('analysis-play').setAttribute('aria-label',analysisVideo.paused?'Play visualization':'Pause visualization');}
-$('analysis-play').addEventListener('click',()=>{if(analysisVideo.paused)analysisVideo.play().catch(()=>text('analysis-caption','The video could not play. Please reload the page and try again.'));else analysisVideo.pause();});
-analysisVideo.addEventListener('ratechange',()=>text('analysis-speed',`${analysisVideo.playbackRate}×`));
-analysisVideo.addEventListener('play',updateAnalysisPlayback);analysisVideo.addEventListener('pause',updateAnalysisPlayback);
-analysisVideo.addEventListener('timeupdate',()=>{const t=analysisVideo.currentTime;text('analysis-clock',`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`);if(Number.isFinite(analysisVideo.duration))$('analysis-time').value=100*t/analysisVideo.duration;});
-analysisVideo.addEventListener('emptied',()=>{text('analysis-clock','0:00');$('analysis-time').value=0;updateAnalysisPlayback();});
-$('analysis-time').addEventListener('input',e=>{if(Number.isFinite(analysisVideo.duration))analysisVideo.currentTime=Number(e.target.value)/100*analysisVideo.duration;});
-$('analysis-speed').addEventListener('click',()=>{const speed=analysisVideo.playbackRate===1?.5:analysisVideo.playbackRate===.5?2:1;analysisVideo.playbackRate=speed;text('analysis-speed',`${speed}×`);});
-$('analysis-expand').addEventListener('click',()=>{const stage=document.querySelector('.analysis-stage');if(stage.requestFullscreen)stage.requestFullscreen().catch(()=>{});else if(analysisVideo.webkitEnterFullscreen)analysisVideo.webkitEnterFullscreen();});
 const scales = {
  diversity: {labels:['All three embodiments','Dexterous hand + gripper','Single embodiment'],values:[[84,71,63],[83,67,58]]},
  tasks: {labels:[['20 objects','10 objects','5 objects'],['5 tasks','2 tasks']],values:[[63,58,54],[58,50]]},
